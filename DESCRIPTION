@@ -3,7 +3,7 @@ Title: XRF tools for R
 Version: 0.0.0.9000
 Authors@R: person("Dewey", "Dunnington", email = "dewey@fishandwhistle.net", role = c("aut", "cre"))
 Description: Work with XRF spectra for quantitative or qualitative analysis.
-Depends: R (>= 3.4.3)
+Depends: R (>= 3.4.0)
 Imports:
   rlang,
   dplyr,

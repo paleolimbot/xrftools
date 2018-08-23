@@ -1,39 +1,28 @@
----
-output: github_document
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-library(tidyverse)
-theme_set(theme_bw())
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
-)
-```
-
-# xrf
+xrf
+===
 
 [![Travis-CI Build Status](https://travis-ci.org/paleolimbot/xrf.svg?branch=master)](https://travis-ci.org/paleolimbot/xrf)
 
 The goal of xrf is to provide tools to read, plot, and interpret X-Ray fluorescence spectra.
 
-## Installation
+Installation
+------------
 
 You can install xrf from github with:
 
-```{r gh-installation, eval = FALSE}
+``` r
 # install.packages("devtools")
 devtools::install_github("paleolimbot/xrf")
 ```
 
-## Example
+Example
+-------
 
 Read in a Panalytical XRF spectrum and plot it.
 
-```{r example}
+``` r
 library(tidyverse)
 library(xrf)
 
@@ -46,3 +35,5 @@ specs %>%
   geom_line() +
   facet_wrap(vars(ConditionSet), scales = "free_y")
 ```
+
+![](README-example-1.png)
