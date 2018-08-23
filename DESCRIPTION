@@ -1,0 +1,22 @@
+Package: xrf
+Title: XRF tools for R
+Version: 0.0.0.9000
+Authors@R: person("Dewey", "Dunnington", email = "dewey@fishandwhistle.net", role = c("aut", "cre"))
+Description: Work with XRF spectra for quantitative or qualitative analysis.
+Depends: R (>= 3.4.3)
+Imports:
+  rlang,
+  dplyr,
+  purrr,
+  tibble,
+  utils,
+  tidyr,
+  readr,
+  magrittr,
+  stringr
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat
+RoxygenNote: 6.0.1
