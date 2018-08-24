@@ -46,3 +46,19 @@ specs %>%
   geom_line() +
   facet_wrap(vars(ConditionSet), scales = "free_y")
 ```
+
+```{r}
+spec1 <- specs$.spectra[[1]]
+
+library(baseline)
+baseline_output <- baseline(matrix(spec1$counts, nrow = 1), method = "als", p = 0.003, lambda = 6)
+spec1$als <- getBaseline(baseline_output)[1,]
+
+spec1 %>%
+  gather(type, value, -energy_kev) %>%
+  filter(!(type %in% c("fit", "counts"))) %>%
+  ggplot(aes(x = energy_kev, y = value, col = type)) +
+  geom_line()
+```
+
+
