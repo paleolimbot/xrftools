@@ -1,33 +1,27 @@
 
 #' Elemental X-ray energies
 #'
-#' Emission and edge (minimum excitation) energies for elements, based on table 4.2.1 in Kaye and Laby (1995).
-#' Additional references provided in the book are included in the references section.
+#' Transition energies that may be found in X-Ray spectra and that may be useful in the analysis
+#' of XRF data. This dataset includes the KL2 (Kalpha2), KL3 (Kalpha1), KM3 (Kbeta1), L2M4 (Lbeta1),
+#' L3M4 (Lalpha2), L3M5 (Lalpha1), and L3N5 (Lbeta2) transition energies for all elements.
+#' References in the \code{ref} column can be found at the
+#' \href{NIST X-Ray Transitions Database References}{https://physics.nist.gov/PhysRefData/XrayTrans/Html/refs.html}
+#' page. Similar information is provided in Kaye and Laby (1995).
 #'
 #' @source
-#' Kaye, G. W. C., and T. H. Laby. Tables of Physical and Chemical Constants and Some Mathematical Functions.
-#' 16th edition. Essex, England; New York: Longman Sc & Tech, 1995. \url{http://www.kayelaby.npl.co.uk/toc/}.
+#' National Institute of Standards and Technology (NIST): X-Ray Transition Energies Database.
+#' Retrieved August 2018. \url{https://physics.nist.gov/PhysRefData/XrayTrans/Html/search.html}.
 #'
 #' @references
-#' Bearden (1967) Rev. Mod. Phys., 39(1), 78.
+#' National Institute of Standards and Technology (NIST): X-Ray Transition Energies Database.
+#' Retrieved August 2018. \url{https://physics.nist.gov/PhysRefData/XrayTrans/Html/search.html}.
 #'
-#' Clark (1963) Encyclopaedia of X-rays and Gamma Rays, Reinhold.
-#'
-#' Dewey, Mapes and Reynolds (1969) Progress in Nuclear Energy, Series IX,
-#' Analytical Chemistry, Elion and Stewart (eds), Pergamon.
-#'
-#' Krause (1979) J. Physical and Chemical Reference Data, 8, 307–27.
-#'
-#' Mitchell and Barfoot (1981) Nuclear Science Applications, 1, 99.
-#'
-#' Robinson (ed.) (1974) Handbook of Spectroscopy, Vol. 1, p. 228, CRC Press, Cleveland.
+#' Kaye, G. W. C., and T. H. Laby. Tables of Physical and Chemical Constants and Some Mathematical Functions.
+#' 16th edition. Essex, England; New York: Longman Sc & Tech, 1995. Table 4.2.1:
+#' \url{http://www.kayelaby.npl.co.uk/atomic_and_nuclear_physics/4_2/4_2_1.html}.
 #'
 #' Salem, S.I., S.L. Panossian, and R.A. Krause. "Experimental K and L Relative X-Ray Emission Rates."
 #' Atomic Data and Nuclear Data Tables 14, no. 2 (August 1974): 91–109.
 #' \url{https://doi.org/10.1016/S0092-640X(74)80017-3}.
 #'
-#' Sandström (1957) Handbuch der Physik, Vol. XXX, X-rays, Springer-Verlag.
-#'
-#' Singh et al. (1990) Nuclear Instruments and Methods in Physics Research, B51, 5.
-#'
-"x_ray_energies"
+"x_ray_energies_all"

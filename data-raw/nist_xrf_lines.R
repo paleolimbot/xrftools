@@ -44,8 +44,9 @@ energies <- read_tsv(
   select(-a) %>%
   mutate_at(vars(ends_with("_ev")), "/", 1000) %>%
   rename_at(vars(ends_with("_ev")), str_replace, "_ev$", "_kev") %>%
-  # only use energies less than  the highest strength beam used in XRF (ish)
-  filter(direct_kev <= 60) %>%
   mutate(element = as_factor(element)) %>%
   arrange(element, trans_siegbahn) %>%
   mutate(element = as.character(element))
+
+x_ray_energies_all <- energies
+devtools::use_data(x_ray_energies_all, overwrite = TRUE)

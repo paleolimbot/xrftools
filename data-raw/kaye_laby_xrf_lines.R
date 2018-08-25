@@ -111,5 +111,6 @@ stopifnot(
     `==`(7.058)
 )
 
-x_ray_energies <- energies
-devtools::use_data(x_ray_energies, overwrite = TRUE)
+# Now using NIST values
+# x_ray_energies <- energies
+# devtools::use_data(x_ray_energies, overwrite = TRUE)
