@@ -2,9 +2,9 @@
 library(tidyverse)
 
 # Landing page: https://physics.nist.gov/PhysRefData/XrayTrans/Html/search.html
-# HTML version: https://physics.nist.gov/cgi-bin/XrayTrans/search.pl?element=All&trans=KL2&trans=KL3&trans=KM3&trans=L2M4&trans=L3M4&trans=L3M5&trans=L3N5&lower=&upper=&units=eV
+# HTML version: https://physics.nist.gov/cgi-bin/XrayTrans/search.pl?element=All&trans=KL2&trans=KL3&trans=KM2&trans=KM3&trans=KM4&trans=KM5&trans=KN2&trans=KN3&trans=KN4&trans=KN5&trans=L2M4&trans=L3M4&trans=L3M5&trans=L3N5&lower=&upper=&units=eV
 # curl::curl_download(
-#   "https://physics.nist.gov/cgi-bin/XrayTrans/search.pl?download=tab&element=All&trans=KL2&trans=KL3&trans=KM3&trans=L2M4&trans=L3M4&trans=L3M5&trans=L3N5&lower=&upper=&units=eV",
+#   "https://physics.nist.gov/cgi-bin/XrayTrans/search.pl?download=tab&element=All&trans=KL2&trans=KL3&trans=KM2&trans=KM3&trans=KM4&trans=KM5&trans=KN2&trans=KN3&trans=KN4&trans=KN5&trans=L2M4&trans=L3M4&trans=L3M5&trans=L3N5&lower=&upper=&units=eV",
 #   "data-raw/nist_xrf_lines.tsv"
 # )
 
@@ -20,8 +20,7 @@ header <- read_lines("data-raw/nist_xrf_lines.tsv", skip = 1, n_max = 1) %>%
   first() %>%
   str_trim() %>%
   tibble(x = .) %>%
-  separate(x, c("trans", "trans_siegbahn"), " ") %>%
-  mutate(trans_siegbahn = str_remove_all(trans_siegbahn, "[\\(\\)]"))
+  extract(x, c("trans", "trans_siegbahn"), "(.*?) \\((.*?)\\)")
 
 energies <- read_tsv(
   "data-raw/nist_xrf_lines.tsv",
@@ -48,5 +47,5 @@ energies <- read_tsv(
   arrange(element, trans_siegbahn) %>%
   mutate(element = as.character(element))
 
-x_ray_energies_all <- energies
-devtools::use_data(x_ray_energies_all, overwrite = TRUE)
+x_ray_energies <- energies
+devtools::use_data(x_ray_energies, overwrite = TRUE)
