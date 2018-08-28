@@ -42,3 +42,29 @@
 #' \url{https://en.wikipedia.org/w/index.php?title=X-ray_fluorescence&oldid=844112718}.
 #'
 "xrf_energies"
+
+#' Read XRF example spectra
+#'
+#' @param .dir The subdirectory from which to read
+#' @param ... Used to \link[dplyr]{filter} spectra
+#' @param .which Used to subset files before they are read. Use TRUE for all.
+#'
+#' @return A spectra tibble
+#' @export
+#'
+#' @examples
+#' read_xrf_example(.which = 1:10)
+#' read_xrf_example(SampleIdent == "oreas 22d")
+#'
+read_xrf_example <- function(..., .dir = c("Panalytical"), .which = TRUE) {
+  .dir <- match.arg(.dir)
+  example_dir <- system.file("spectra_files", package = "xrf")
+  if(.dir == "Panalytical") {
+    subdir <- file.path(example_dir, .dir)
+    spectra <- read_xrf_panalytical(
+      list.files(subdir, "\\.mp2$", full.names = TRUE)[.which]
+    )
+  }
+
+  dplyr::filter(spectra, ...)
+}

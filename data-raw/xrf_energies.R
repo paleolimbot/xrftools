@@ -73,4 +73,9 @@ xrf_energies <- xrf_energies_wiki %>%
   select(element, trans, trans_siegbahn, energy_kev = direct_kev) %>%
   mutate(line = "primary")
 
+
+# secondary peaks:
+# Fe at 7.058175 (Kbeta1 + 3)
+
+
 devtools::use_data(xrf_energies, overwrite = TRUE)

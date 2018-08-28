@@ -76,6 +76,9 @@ read_xrf_spectra_panalytical <- function(path) {
   n_header_lines <- which(!stringr::str_detect(header, ":"))[1] - 1
   stopifnot(is.finite(n_header_lines))
 
+  # need some information from the meta to calculate cps
+  meta <- read_xrf_meta_panalytical(path)
+
   spect_df <- readr::read_delim(
     path, "\t", skip = n_header_lines,
     col_types = readr::cols(.default = readr::col_double())
@@ -84,6 +87,11 @@ read_xrf_spectra_panalytical <- function(path) {
     stringr::str_to_lower() %>%
     stringr::str_replace_all("[^a-z0-9]+", "_") %>%
     stringr::str_remove_all("(^_)|(_$)")
+
+  spect_df$cps <- spect_df$counts / meta$LiveTime
+  if("background" %in% names(spect_df)) {
+    spect_df$baseline <- spect_df$background / meta$LiveTime
+  }
 
   tibble::tibble(.path = path, .position = 1L, .spectra = list(spect_df))
 }
