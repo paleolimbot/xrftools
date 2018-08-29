@@ -16,7 +16,8 @@ Imports:
   stringr,
   withr,
   smoother,
-  Peaks
+  Peaks,
+  Rcpp
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -26,3 +27,4 @@ Suggests:
 RoxygenNote: 6.0.1
 URL: https://github.com/paleolimbot/xrf
 BugReports: https://github.com/paleolimbot/xrf/issues
+LinkingTo: Rcpp

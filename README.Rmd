@@ -69,7 +69,7 @@ specs %>%
 specs %>%
   slice(3) %>%
   xrf_add_baseline_snip(iterations = 20) %>%
-  xrf_add_smooth_gaussian() %>%
+  xrf_add_smooth_filter(filter = xrf_filter_gaussian(alpha = 2.5), .iter = 5) %>%
   unnest() %>%
   filter(energy_kev <= 15) %>%
   ggplot(aes(x = energy_kev)) +

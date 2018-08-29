@@ -4,8 +4,7 @@
 \alias{xrf_add_smooth}
 \title{Smooth spectra using a function}
 \usage{
-xrf_add_smooth(.spectra, .fun, ..., .iter = 0, .epsilon = NA,
-  .env = parent.frame())
+xrf_add_smooth(.spectra, .fun, ..., .env = parent.frame())
 }
 \arguments{
 \item{.spectra}{A spectra_df}
@@ -14,10 +13,6 @@ xrf_add_smooth(.spectra, .fun, ..., .iter = 0, .epsilon = NA,
 of the same length}
 
 \item{...}{Passed to \code{.fun}, evaluated within .spectra}
-
-\item{.iter}{Maximum number of iterations to smooth (minus 1)}
-
-\item{.epsilon}{Further constrain maximum iterations}
 
 \item{.env}{The calling environment}
 }
