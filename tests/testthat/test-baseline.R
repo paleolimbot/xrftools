@@ -1,8 +1,18 @@
 context("test-baseline.R")
 
+test_that("SNIP baseline works as expected", {
+  spectra <- read_xrf_example(.which = 1)
+  spectra_baseline <- xrf_add_baseline_snip(spectra)
+  expect_true("baseline" %in% names(spectra_baseline$.spectra[[1]]))
+  expect_identical(
+    spectra_baseline$.spectra[[1]]$baseline,
+    Peaks::SpectrumBackground(spectra$.spectra[[1]]$cps)
+  )
+})
+
 test_that("baseline package functions work as expected", {
   spectra <- read_xrf_example(.which = 1)
-  spectra_baseline <- xrf_add_baseline_pkg(spectra, method = "als", p = 0.003, clamp = -Inf)
+  spectra_baseline <- xrf_add_baseline_pkg(spectra, method = "als", p = 0.003, .clamp = -Inf)
   expect_true("baseline" %in% names(spectra_baseline$.spectra[[1]]))
   expect_identical(
     spectra_baseline$.spectra[[1]]$baseline,
@@ -21,7 +31,7 @@ test_that("tidy evaluation works in baseline package functions", {
     read_xrf_example(.which = 1)
   )
 
-  spectra_baseline <- xrf_add_baseline_pkg(spectra, method = "als", p = p_val, clamp = -Inf)
+  spectra_baseline <- xrf_add_baseline_pkg(spectra, method = "als", p = p_val, .clamp = -Inf)
 
   expect_identical(
     spectra_baseline$.spectra[[1]]$baseline,
@@ -41,13 +51,5 @@ test_that("tidy evaluation works in baseline package functions", {
         method = "als", p = 0.01
       )
     )[1, , drop = TRUE]
-  )
-})
-
-test_that("xrf_add_baseline_als() passes all its arguments along", {
-  spectra <- read_xrf_example(.which = 1:2)
-  expect_identical(
-    xrf_add_baseline_als(spectra, p = 0.05, lambda = 7, maxit = 19, clamp = 0.01),
-    xrf_add_baseline_pkg(spectra, p = 0.05, lambda = 7, maxit = 19, clamp = 0.01, method = "als")
   )
 })

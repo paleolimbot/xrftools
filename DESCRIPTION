@@ -13,7 +13,9 @@ Imports:
   tidyr,
   readr,
   magrittr,
-  stringr
+  stringr,
+  withr,
+  Peaks
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

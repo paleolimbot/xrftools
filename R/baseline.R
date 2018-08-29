@@ -1,61 +1,91 @@
 
-#' Asymmetric least squares baseline calcluation
+#' Calculate baselines using SNIP
 #'
-#' Uses the \link[baseline]{baseline.als} function in the baseline package.
+#' Based on \link[Peaks]{SpectrumBackground} (Peaks package). The most useful parameter to change is the
+#' \code{iterations} argument (higher value will result in a more conservative baseline estimation).
 #'
-#' @param p,lambda,maxit See \link[baseline]{baseline.als}
+#' ... Passed to \link[Peaks]{SpectrumBackground}
 #' @inheritParams xrf_add_baseline_pkg
 #'
-#' @return spectra with original information plus basline added
 #' @export
 #'
-#' @importFrom rlang enquo quos !! !!! .data
-#'
-xrf_add_baseline_als <- function(
-  spectra, p = 0.003, lambda = 6, maxit = 20, clamp = 0,
-  values = .data$cps, env = parent.frame()
-) {
-  xrf_add_baseline_pkg(
-    spectra = spectra, method = "als",
-    p = !!enquo(p), lambda = !!enquo(lambda), maxit = !!enquo(maxit), clamp = clamp,
-    values = !!enquo(values), env = env
+xrf_add_baseline_snip <- function(.spectra, .values = .data$.spectra$cps, ..., .clamp = -Inf, .env = parent.frame()) {
+  # have to load the Peaks DLLs for some reason
+  .First.lib <- NULL; rm(.First.lib)
+  withr::with_namespace("Peaks", .First.lib(dirname(find.package("Peaks")), "Peaks"))
+
+  .values <- enquo(.values)
+  dots <- quos(...)
+  xrf_add_baseline(
+    .spectra,
+    Peaks::SpectrumBackground,
+    !!.values,
+    ...,
+    .clamp = .clamp,
+    .env = .env
   )
 }
 
 #' Caclulate baselines using the baseline package
 #'
-#' Wraps a call to the \link[baseline]{baseline}()
+#' Wraps a call to the \link[baseline]{baseline}(). See documentation in that package for
+#' references for baseline correction.
 #'
-#' @param spectra A data frame with a nested .spectra column
-#' @param values The value column in each spectra object
+#' @param .values The value column in each spectra object
 #' @param ... Passed to \link[baseline]{baseline}. Evaluated rowwise using objects in \code{spectra}.
-#' @param clamp The smallest value that the baseline should be. Use -Inf to suppress.
-#' @param env The calling environment
+#' @inheritParams xrf_add_baseline
+#'
+#' @references
+#' See \link[baseline]{baseline}
 #'
 #' @export
 #'
-xrf_add_baseline_pkg <- function(spectra, ..., values = .data$cps, clamp = 0, env = parent.frame()) {
+xrf_add_baseline_pkg <- function(.spectra, .values = .data$.spectra$cps, ..., .clamp = -Inf, .env = parent.frame()) {
+  .values <- enquo(.values)
+  xrf_add_baseline(
+    .spectra,
+    function(x, ...) {
+      obj <- baseline::baseline(matrix(x, nrow = 1), ...)
+      baseline::getBaseline(obj)[1, , drop = TRUE]
+    },
+    !!.values,
+    ...,
+    .clamp = .clamp,
+    .env = .env
+  )
+}
+
+#' Add a baseline estimate from a function
+#'
+#' @param .spectra A spectra_df
+#' @param .fun A function that receives a vector of values and outputs a vector of values
+#'   of the same length
+#' @param ... Passed to \code{.fun}, evaluated within .spectra
+#' @param .clamp The minimum allowable value for background
+#' @param .env The calling environment
+#'
+#' @return .spectra with a modified .spectra column
+#' @export
+#'
+#' @importFrom rlang enquo quos !! !!!
+#'
+xrf_add_baseline <- function(.spectra, .fun, ..., .clamp = -Inf, .env = parent.frame()) {
   stopifnot(
-    is.numeric(clamp), length(clamp) == 1
+    is.numeric(.clamp), length(.clamp) == 1
   )
 
-  values <- enquo(values)
   dots <- quos(...)
-  spectra$.spectra <- purrr::map(purrr::transpose(spectra), function(spectrum) {
+  .spectra$.spectra <- purrr::map(purrr::transpose(.spectra), function(spectrum) {
     x <- spectrum$.spectra
-    # vals and args evaluated within each row
-    vals <- rlang::eval_tidy(values, data = x, env = env)
-    args <- c(
-      list(matrix(vals, nrow = 1)),
-      purrr::map(dots, rlang::eval_tidy, data = spectrum, env = env)
-    )
 
-    baseline_output <- do.call(baseline::baseline, args)
-    x$baseline <- baseline::getBaseline(baseline_output)[1, , drop = TRUE]
-    x$baseline <- pmax(x$baseline, clamp)
+    # args evaluated within each row
+    args <- purrr::map(dots, rlang::eval_tidy, data = spectrum, env = .env)
+
+    x$baseline <- do.call(.fun, args)
+    x$baseline <- pmax(x$baseline, .clamp)
 
     x
   })
 
-  spectra
+  .spectra
 }
