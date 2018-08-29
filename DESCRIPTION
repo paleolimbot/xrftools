@@ -15,6 +15,7 @@ Imports:
   magrittr,
   stringr,
   withr,
+  smoother,
   Peaks
 License: GPL-3
 Encoding: UTF-8

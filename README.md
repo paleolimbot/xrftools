@@ -39,25 +39,55 @@ specs %>%
 ![](README-example-1.png)
 
 Baselines
-=========
+---------
 
 The **xrf** package can use several existing methods for estimating "background" or "baseline" values. The most useful of these for XRF spectra is the Sensitive Nonlinear Iterative Peak (SNIP) method, implemented in the **Peaks** package.
 
 ``` r
 specs %>%
-  xrf_add_baseline_snip(iterations = 20) %>%
   slice(3) %>%
+  xrf_add_baseline_snip(iterations = 20) %>%
   unnest() %>%
+  filter(energy_kev <= 15) %>%
   ggplot(aes(x = energy_kev)) +
   geom_line(aes(y = cps, col = "raw")) +
   geom_line(aes(y = baseline, col = "baseline")) +
   geom_line(aes(y = cps - baseline, col = "cps - baseline"))
+#> Warning: package 'bindrcpp' was built under R version 3.4.4
 ```
 
 ![](README-unnamed-chunk-2-1.png)
 
+Smoothing
+---------
+
+``` r
+specs %>%
+  slice(3) %>%
+  xrf_add_baseline_snip(iterations = 20) %>%
+  xrf_add_smooth_gaussian() %>%
+  unnest() %>%
+  filter(energy_kev <= 15) %>%
+  ggplot(aes(x = energy_kev)) +
+  geom_line(aes(y = cps, col = "raw"), alpha = 0.3) +
+  geom_line(aes(y = smooth - baseline, col = "smooth"))
+```
+
+![](README-unnamed-chunk-3-1.png)
+
 Peaks
-=====
+-----
+
+``` r
+energy_kev <- specs$.spectra[[1]]$energy_kev
+spec <- specs$.spectra[[1]]$fit
+peaks <- Peaks::SpectrumSearch(spec, background = TRUE, iterations = 15, threshold = .5)
+ggplot(tibble(energy_kev, spec, deconv = peaks$y), aes(energy_kev)) +
+  geom_line(aes(y = spec, col = "original")) +
+  geom_line(aes(y = deconv, col = "deconv")) +
+  geom_vline(xintercept = energy_kev[peaks$pos], alpha = 0.2, col = "red") +
+  scale_y_sqrt()
+```
 
 ``` r
 oreas22d <- specs %>%

@@ -93,6 +93,10 @@ read_xrf_spectra_panalytical <- function(path) {
     spect_df$baseline <- spect_df$background / meta$LiveTime
   }
 
+  if("fit" %in% names(spect_df)) {
+    spect_df$smooth <- spect_df$fit / meta$LiveTime
+  }
+
   tibble::tibble(.path = path, .position = 1L, .spectra = list(spect_df))
 }
 

@@ -15,7 +15,6 @@ xrf_add_baseline_snip <- function(.spectra, .values = .data$.spectra$cps, ..., .
   withr::with_namespace("Peaks", .First.lib(dirname(find.package("Peaks")), "Peaks"))
 
   .values <- enquo(.values)
-  dots <- quos(...)
   xrf_add_baseline(
     .spectra,
     Peaks::SpectrumBackground,
