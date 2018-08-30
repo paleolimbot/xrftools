@@ -4,21 +4,19 @@
 \name{xrf_energies}
 \alias{xrf_energies}
 \title{XRF quantification energies}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 88 rows and 5 columns.}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 310 rows and 7 columns.}
 \source{
-NIST (2018), and Wikipedia.
+NIST (2018)
 }
 \usage{
 xrf_energies
 }
 \description{
-Common energies used to quantify elements in XRF.
+Common energies used to quantify elements in XRF, including edge energies (energy
+needed to produce that line on the spectrum).
 }
 \references{
 National Institute of Standards and Technology (NIST): X-Ray Transition Energies Database.
 Retrieved August 2018. \url{https://physics.nist.gov/PhysRefData/XrayTrans/Html/search.html}.
-
-"X-Ray Fluorescence." Wikipedia, June 2, 2018.
-\url{https://en.wikipedia.org/w/index.php?title=X-ray_fluorescence&oldid=844112718}.
 }
 \keyword{datasets}

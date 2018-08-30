@@ -29,17 +29,15 @@
 
 #' XRF quantification energies
 #'
-#' Common energies used to quantify elements in XRF.
+#' Common energies used to quantify elements in XRF, including edge energies (energy
+#' needed to produce that line on the spectrum).
 #'
 #' @source
-#' NIST (2018), and Wikipedia.
+#' NIST (2018)
 #'
 #' @references
 #' National Institute of Standards and Technology (NIST): X-Ray Transition Energies Database.
 #' Retrieved August 2018. \url{https://physics.nist.gov/PhysRefData/XrayTrans/Html/search.html}.
-#'
-#' "X-Ray Fluorescence." Wikipedia, June 2, 2018.
-#' \url{https://en.wikipedia.org/w/index.php?title=X-ray_fluorescence&oldid=844112718}.
 #'
 "xrf_energies"
 
