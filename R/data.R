@@ -41,6 +41,28 @@
 #'
 "xrf_energies"
 
+#' Get XRF energies for selected elements
+#'
+#' @param elements Elements or element lists (passed to \link{xrf_element_list}).
+#' @param beam_energy_kev Beam energy
+#' @param ... Used to further \link[dplyr]{filter} the result.
+#'
+#' @return A subset of \link{xrf_energies}
+#' @export
+#'
+#' @examples
+#' xrf_get_energies("major", 25)
+#'
+xrf_get_energies <- function(elements = "everything", beam_energy_kev = Inf, ...) {
+  elements <- xrf_element_list(elements)
+  xrf::xrf_energies %>%
+    dplyr::filter(
+      .data$element %in% !!elements,
+      .data$edge_kev <= !!beam_energy_kev,
+      ...
+    )
+}
+
 #' Read XRF example spectra
 #'
 #' @param .dir The subdirectory from which to read
