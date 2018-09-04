@@ -143,6 +143,7 @@ select.spectra <- function(.data, ...) {
 #' Behaviour is identical to \link[dplyr]{bind_rows}.
 #'
 #' @param ... XRF spectra or lists of XRF spectra.
+#' @param .id Column in ouput that will contain names or indicies of input
 #'
 #' @return A spectra.
 #' @export

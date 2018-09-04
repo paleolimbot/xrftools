@@ -11,6 +11,8 @@ xrf_combine_spectra(..., .id = NULL)
 }
 \arguments{
 \item{...}{XRF spectra or lists of XRF spectra.}
+
+\item{.id}{Column in ouput that will contain names or indicies of input}
 }
 \value{
 A spectra.
