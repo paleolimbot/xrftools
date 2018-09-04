@@ -3,7 +3,7 @@
 xrf
 ===
 
-[![Travis-CI Build Status](https://travis-ci.org/paleolimbot/xrf.svg?branch=master)](https://travis-ci.org/paleolimbot/xrf)
+[![Travis-CI Build Status](https://travis-ci.org/paleolimbot/xrf.svg?branch=master)](https://travis-ci.org/paleolimbot/xrf) [![Coverage status](https://codecov.io/gh/paleolimbot/xrf/branch/master/graph/badge.svg)](https://codecov.io/github/paleolimbot/xrf?branch=master)
 
 The goal of xrf is to provide tools to read, plot, and interpret X-Ray fluorescence spectra.
 
@@ -25,11 +25,17 @@ Read in a Panalytical XRF spectrum and plot it.
 ``` r
 library(tidyverse)
 library(xrf)
+#> 
+#> Attaching package: 'xrf'
+#> The following object is masked from 'package:stats':
+#> 
+#>     filter
 
 pan_example_dir <- system.file("spectra_files/Panalytical", package = "xrf")
 pan_files <- list.files(pan_example_dir, ".mp2", full.names = TRUE)
 specs <- read_xrf_panalytical(pan_files)
 specs %>%
+  xrf_despectra() %>%
   unnest(.spectra) %>%
   ggplot(aes(x = energy_kev, y = cps, col = SampleIdent)) +
   geom_line() +
@@ -47,6 +53,7 @@ The **xrf** package can use several existing methods for estimating "background"
 specs %>%
   slice(3) %>%
   xrf_add_baseline_snip(iterations = 20) %>%
+  xrf_despectra() %>%
   unnest() %>%
   filter(energy_kev <= 15) %>%
   ggplot(aes(x = energy_kev)) +
@@ -65,7 +72,8 @@ Smoothing
 specs %>%
   slice(3) %>%
   xrf_add_baseline_snip(iterations = 20) %>%
-  xrf_add_smooth_gaussian() %>%
+  xrf_add_smooth_filter(filter = xrf_filter_gaussian(alpha = 2.5), .iter = 5) %>%
+  xrf_despectra() %>%
   unnest() %>%
   filter(energy_kev <= 15) %>%
   ggplot(aes(x = energy_kev)) +
@@ -79,14 +87,21 @@ Peaks
 -----
 
 ``` r
-energy_kev <- specs$.spectra[[1]]$energy_kev
-spec <- specs$.spectra[[1]]$fit
-peaks <- Peaks::SpectrumSearch(spec, background = TRUE, iterations = 15, threshold = .5)
-ggplot(tibble(energy_kev, spec, deconv = peaks$y), aes(energy_kev)) +
-  geom_line(aes(y = spec, col = "original")) +
+spec <- specs %>%
+  slice(3) %>%
+  xrf_add_baseline_snip(iterations = 20) %>%
+  xrf_add_smooth_filter(filter = xrf_filter_gaussian(alpha = 2.5), .iter = 5) %>%
+  pull(.spectra) %>%
+  first()
+
+peaks <- Peaks::SpectrumSearch(spec$fit - spec$background, threshold = 0.01)
+spec$deconv <- peaks$y
+
+ggplot(spec, aes(energy_kev)) +
+  geom_line(aes(y = fit - background, col = "original")) +
   geom_line(aes(y = deconv, col = "deconv")) +
-  geom_vline(xintercept = energy_kev[peaks$pos], alpha = 0.2, col = "red") +
-  scale_y_sqrt()
+  geom_vline(xintercept = spec$energy_kev[peaks$pos], alpha = 0.2, col = "red") +
+  xlim(0, 10)
 ```
 
 ``` r
