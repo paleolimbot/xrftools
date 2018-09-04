@@ -17,7 +17,9 @@ Imports:
   withr,
   smoother,
   Peaks,
-  Rcpp
+  Rcpp,
+  ggplot2,
+  ggrepel
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

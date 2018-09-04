@@ -1,5 +1,4 @@
 
-
 #' Create an XRF spectra
 #'
 #' @param .spectra A data frame or list of data frames with columns (at least) "energy_kev" and "cps".
