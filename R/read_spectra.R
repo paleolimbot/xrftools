@@ -4,6 +4,8 @@
 #' @param path A filename or vector of filenames that correspond to Panalytical spectrum files
 #'   (usually a .mp2 file)
 #' @param parse_meta Parse meta information into numerics where applicable?
+#' @param .validate Use FALSE to skip validation of spectra. May increase speed or help
+#'   diagnose problems.
 #'
 #' @return A spectra object
 #' @export
@@ -14,11 +16,13 @@
 #' pan_dir <- system.file("spectra_files/Panalytical", package = "xrf")
 #' read_xrf_panalytical(file.path(pan_dir, "Panalytical_2017-08-1632-Omnian.mp2"))
 #'
-read_xrf_panalytical <- function(path, parse_meta = TRUE) {
+read_xrf_panalytical <- function(path, parse_meta = TRUE, .validate = TRUE) {
   meta_df <- read_xrf_meta_panalytical(path, parse_meta = parse_meta)
   spect_df <- read_xrf_spectra_panalytical(path)
   meta_df$.spectra <- spect_df$.spectra
-  meta_df
+  spec <- new_spectra(meta_df)
+  if(.validate) validate_spectra(spec)
+  spec
 }
 
 #' @rdname read_xrf_panalytical
@@ -26,7 +30,7 @@ read_xrf_panalytical <- function(path, parse_meta = TRUE) {
 read_xrf_meta_panalytical <- function(path, parse_meta = TRUE) {
   stopifnot(is.character(path), all(file.exists(path)))
   if(length(path) == 0) {
-    return(tibble::tibble(.path = character(0), .position = integer(0)))
+    return(xrf_spectra(.spectra = list(), .path = character(0), .position = integer(0)))
   } else if(length(path) > 1) {
     tbl <- purrr::map_dfr(path, read_xrf_meta_panalytical, parse_meta = FALSE)
     if(parse_meta) {

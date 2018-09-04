@@ -6,7 +6,7 @@
 \alias{read_xrf_spectra_panalytical}
 \title{Read a Panalytical spectra file into a spectra object}
 \usage{
-read_xrf_panalytical(path, parse_meta = TRUE)
+read_xrf_panalytical(path, parse_meta = TRUE, .validate = TRUE)
 
 read_xrf_meta_panalytical(path, parse_meta = TRUE)
 
@@ -17,6 +17,9 @@ read_xrf_spectra_panalytical(path)
 (usually a .mp2 file)}
 
 \item{parse_meta}{Parse meta information into numerics where applicable?}
+
+\item{.validate}{Use FALSE to skip validation of spectra. May increase speed or help
+diagnose problems.}
 }
 \value{
 A spectra object
