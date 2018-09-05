@@ -23,9 +23,8 @@ autoplot.spectra <- function(object, subset = NULL, x = .data$energy_kev, y = .d
   dots <- quos(...)
 
   data <- object %>%
-    xrf_despectra() %>%
     dplyr::mutate(.group = !!group) %>%
-    tidyr::unnest()
+    ggplot2::fortify()
 
   if(!rlang::quo_is_null(subset)) {
     data <- dplyr::filter(data, !!subset)
@@ -36,6 +35,12 @@ autoplot.spectra <- function(object, subset = NULL, x = .data$energy_kev, y = .d
     if(!rlang::quo_is_null(facet)) {
       ggplot2::facet_wrap(ggplot2::vars(!!facet), nrow = nrow, ncol = ncol, scales = scales)
     }
+}
+
+#' @importFrom ggplot2 fortify
+#' @export
+fortify.spectra <- function(model, data = NULL, ...) {
+  tidyr::unnest(xrf_despectra(model), .data$.spectra)
 }
 
 #' Add XRF Peaks to a ggplot

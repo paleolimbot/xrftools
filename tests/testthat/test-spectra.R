@@ -90,6 +90,9 @@ test_that("data frame s3 methods work on spectra objects", {
   expect_identical(spec, spec[TRUE, ])
   expect_identical(spec, spec %>% dplyr::mutate())
 
+  expect_equal(spec %>% dplyr::mutate(a = info1) %>% dplyr::pull(info1), "info1")
+  expect_equal(spec %>% dplyr::filter(info1 == "not info") %>% nrow(), 0)
+
   expect_identical(
     xrf_combine_spectra(spec, spec),
     xrf_combine_spectra(list(spec, spec))

@@ -4,10 +4,10 @@ test_that("plots are generated", {
 
   pan <- read_xrf_example(SampleIdent %in% c("oreas 22d", "oreas 24b"))
 
-  expect_is(pan %>% slice(1) %>% ggplot2::autoplot(), "ggplot")
+  expect_is(pan %>% dplyr::slice(1) %>% ggplot2::autoplot(), "ggplot")
 
   print(
-    ggplot2::autoplot(
+    xrf:::autoplot.spectra(
       pan, energy_kev < kV,
       y = smooth - baseline,
       col = SampleIdent, facet = ConditionSet
