@@ -24,8 +24,29 @@
 #'
 "x_ray_energies"
 
-#' @rdname x_ray_energies
-"x_ray_intensities"
+
+#' EADL97 Atomic data
+#'
+#' Data
+#'
+#' @source
+#' The PyMca5 python package (\url{https://pypi.org/project/PyMca5/#files}),
+#' which obtained the data from the EADL page (\url{http://www-nds.iaea.org/epdl97/libsall.htm})
+#'
+#' @references
+#' D.E. Cullen, et al., "Tables and Graphs of Atomic Subshell and
+#' Relaxation Data Derived from the LLNL Evaluated Atomic Data Library
+#' (EADL), Z = 1 - 100," Lawrence Livermore National Laboratory, UCRL-50400,
+#' Vol. 30, October 1991
+#'
+"x_ray_binding_energies"
+
+#' @rdname x_ray_binding_energies
+"x_ray_cross_sections"
+
+#' @rdname x_ray_binding_energies
+"x_ray_emission_probabilities"
+
 
 #' XRF quantification energies
 #'
@@ -33,7 +54,7 @@
 #' needed to produce that line on the spectrum).
 #'
 #' @source
-#' NIST (2018)
+#' NIST (2018), EADL97. See \link{x_ray_energies} and \link{x_ray_emission_probabilities}.
 #'
 #' @references
 #' National Institute of Standards and Technology (NIST): X-Ray Transition Energies Database.

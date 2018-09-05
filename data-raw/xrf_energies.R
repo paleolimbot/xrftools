@@ -19,6 +19,7 @@ xrf_energies <- x_ray_energies %>%
   select(element, z, trans, trans_siegbahn, energy_kev = direct_kev) %>%
   extract(trans, "edge", "^([KL][0-9]?)", remove = FALSE) %>%
   left_join(xrf_edges, by = c("element", "edge")) %>%
-  filter(!is.na(edge_kev))
+  left_join(x_ray_emission_probabilities, by = c("element", "trans", "z")) %>%
+  filter(!is.na(edge_kev), !is.na(emission_probability))
 
 devtools::use_data(xrf_energies, overwrite = TRUE)

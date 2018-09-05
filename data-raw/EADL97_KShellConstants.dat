@@ -1,0 +1,127 @@
+#F EADL97_KShellConstants.dat
+#U00 This file is a conversion to specfile format of
+#U01 directly extracted EADL97 Shell constants.
+#U02 to simplify its use with the fisx and PyMca software packages.
+#U03
+#U04 Neither those packages or their author(s) claim any ownership of
+#U05 the data and they do not warrant the integrity of the data following 
+#U07 the conversion process.
+#U06
+#U07 EADL itself can be found at:
+#U08           http://www-nds.iaea.org/epdl97/libsall.htm
+#U09 The code used to generate this file has been:
+#U10 GenerateEADLShellConstants.py
+#U11
+#U12 The proper way to quote these data is:
+#U13 D.E. Cullen, et al., "Tables and Graphs of Atomic Subshell and 
+#U14 Relaxation Data Derived from the LLNL Evaluated Atomic Data Library
+#U15 (EADL), Z = 1 - 100," Lawrence Livermore National Laboratory, UCRL-50400,
+#U16  Vol. 30, October 1991
+#U17 The author of these data, D.E. Cullen, has stated that redistribution of the
+#U18 data is permitted provided the previous credits are maintained.
+#U19 
+
+#S 1 K Shell Fluorescence Yields
+#N 2
+#L Z  omegaK
+1  0.0000E+00
+2  0.0000E+00
+3  0.0000E+00
+4  0.0000E+00
+5  0.0000E+00
+6  1.6821E-03
+7  3.5638E-03
+8  6.1719E-03
+9  9.5705E-03
+10  1.3873E-02
+11  1.9957E-02
+12  2.7323E-02
+13  3.6472E-02
+14  4.7581E-02
+15  6.0807E-02
+16  7.6250E-02
+17  9.3906E-02
+18  1.1387E-01
+19  1.3610E-01
+20  1.6028E-01
+21  1.8743E-01
+22  2.1650E-01
+23  2.4718E-01
+24  2.8013E-01
+25  3.1217E-01
+26  3.4571E-01
+27  3.7947E-01
+28  4.1299E-01
+29  4.4705E-01
+30  4.7866E-01
+31  5.0941E-01
+32  5.3909E-01
+33  5.6735E-01
+34  5.9444E-01
+35  6.2005E-01
+36  6.4429E-01
+37  6.6698E-01
+38  6.8830E-01
+39  7.0836E-01
+40  7.2718E-01
+41  7.4487E-01
+42  7.6121E-01
+43  7.7639E-01
+44  7.9049E-01
+45  8.0359E-01
+46  8.1586E-01
+47  8.2697E-01
+48  8.3731E-01
+49  8.4692E-01
+50  8.5582E-01
+51  8.6408E-01
+52  8.7174E-01
+53  8.7883E-01
+54  8.9047E-01
+55  8.9631E-01
+56  9.0164E-01
+57  9.0664E-01
+58  9.1135E-01
+59  9.1573E-01
+60  9.1981E-01
+61  9.2357E-01
+62  9.2713E-01
+63  9.3040E-01
+64  9.3346E-01
+65  9.3634E-01
+66  9.3900E-01
+67  9.4150E-01
+68  9.4384E-01
+69  9.4602E-01
+70  9.4805E-01
+71  9.4995E-01
+72  9.5172E-01
+73  9.5338E-01
+74  9.5492E-01
+75  9.5638E-01
+76  9.5773E-01
+77  9.5900E-01
+78  9.6017E-01
+79  9.6128E-01
+80  9.6231E-01
+81  9.6328E-01
+82  9.6418E-01
+83  9.6503E-01
+84  9.6582E-01
+85  9.6654E-01
+86  9.6723E-01
+87  9.6785E-01
+88  9.6808E-01
+89  9.6862E-01
+90  9.6912E-01
+91  9.6958E-01
+92  9.6998E-01
+93  9.7036E-01
+94  9.7069E-01
+95  9.7099E-01
+96  9.7215E-01
+97  9.7054E-01
+98  9.7167E-01
+99  9.7183E-01
+100  9.7196E-01
+

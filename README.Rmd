@@ -82,22 +82,50 @@ specs %>%
 
 ## Peaks
 
+$$
+y(i)=∑_{j=1}^{n}h(i-j)x(j)+e(i)
+$$
+
+$$
+x^{(k)}(i)=M^{(k)}(i)x^{(k-1)}(i)
+$$
+
 ```{r, eval=FALSE}
 spec <- specs %>%
-  slice(3) %>%
+  slice(7) %>%
   xrf_add_baseline_snip(iterations = 20) %>%
   xrf_add_smooth_filter(filter = xrf_filter_gaussian(alpha = 2.5), .iter = 5) %>%
   pull(.spectra) %>%
   first()
 
-peaks <- Peaks::SpectrumSearch(spec$fit - spec$background, threshold = 0.01)
-spec$deconv <- peaks$y
+sigma_index <- 6
+energy_kev <- spec$energy_kev
+values <- spec$fit - spec$background
+energy_res <- mean(diff(energy_kev))
+
+search <- Peaks::SpectrumSearch(values, threshold = 0.01, sigma = sigma_index)
+
+g <- function(x, mu = 0, sigma = 1, height = 1) height * exp(-0.5 * ((x - mu) / sigma) ^ 2)
+
+tbl <- tibble::tibble(
+  peak_index = search$pos,
+  peak_energy_kev = energy_kev[peak_index], 
+  peak_sigma = sigma_index * energy_res,
+  peak_height = values[peak_index],
+  peak_area = peak_height * peak_sigma * sqrt(2 * pi)
+)
+
+peak_response = pmap(list(mu = tbl$peak_energy_kev, sigma = tbl$peak_sigma, height = tbl$peak_height), g, energy_kev)
+spec$deconv <- do.call(cbind, peak_response) %>%
+  rowSums()
+spec$deconv2 <- search$y
 
 ggplot(spec, aes(energy_kev)) +
   geom_line(aes(y = fit - background, col = "original")) +
   geom_line(aes(y = deconv, col = "deconv")) +
-  geom_vline(xintercept = spec$energy_kev[peaks$pos], alpha = 0.2, col = "red") +
-  xlim(0, 10)
+  xlim(0, 10) +
+  stat_xrf_peaks(aes(y = fit - background), epsilon = 10) +
+  scale_y_sqrt()
 ```
 
 

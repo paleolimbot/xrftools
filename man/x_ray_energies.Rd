@@ -3,13 +3,10 @@
 \docType{data}
 \name{x_ray_energies}
 \alias{x_ray_energies}
-\alias{x_ray_intensities}
 \title{Elemental X-ray energies and intensities}
 \format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1608 rows and 13 columns.}
 \usage{
 x_ray_energies
-
-x_ray_intensities
 }
 \description{
 Transition energies that may be found in X-Ray spectra and that may be useful in the analysis
