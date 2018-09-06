@@ -4,7 +4,7 @@
 \name{x_ray_energies}
 \alias{x_ray_energies}
 \title{Elemental X-ray energies and intensities}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1608 rows and 13 columns.}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3587 rows and 12 columns.}
 \usage{
 x_ray_energies
 }

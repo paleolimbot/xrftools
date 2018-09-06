@@ -24,10 +24,16 @@
 #'
 "x_ray_energies"
 
+#' X-Ray transitions
+#'
+#' A data frame keeping track of the formal and siegbahn names of various transitions
+#'
+"x_ray_transitions"
+
 
 #' EADL97 Atomic data
 #'
-#' Data
+#' Data from the EADL97 database.
 #'
 #' @source
 #' The PyMca5 python package (\url{https://pypi.org/project/PyMca5/#files}),
@@ -39,12 +45,12 @@
 #' (EADL), Z = 1 - 100," Lawrence Livermore National Laboratory, UCRL-50400,
 #' Vol. 30, October 1991
 #'
-"x_ray_binding_energies"
-
-#' @rdname x_ray_binding_energies
 "x_ray_cross_sections"
 
-#' @rdname x_ray_binding_energies
+#' @rdname x_ray_cross_sections
+"x_ray_fluorescence_yields"
+
+#' @rdname x_ray_cross_sections
 "x_ray_emission_probabilities"
 
 

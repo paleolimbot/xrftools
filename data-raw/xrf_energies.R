@@ -9,6 +9,7 @@ xrf_edges <- x_ray_energies %>%
   filter(!is.na(edge_kev))
 
 xrf_energies <- x_ray_energies %>%
+  left_join(x_ray_transitions, by = "trans") %>%
   filter(trans_siegbahn %in% c("Kalpha1", "Kbeta1", "Lalpha1", "Lbeta1"), !is.na(direct_kev)) %>%
   # some heavy elements have more than one ref
   group_by(element, trans_siegbahn) %>%

@@ -124,8 +124,7 @@ ggplot(spec, aes(energy_kev)) +
   geom_line(aes(y = fit - background, col = "original")) +
   geom_line(aes(y = deconv, col = "deconv")) +
   xlim(0, 10) +
-  stat_xrf_peaks(aes(y = fit - background), epsilon = 10) +
-  scale_y_sqrt()
+  stat_xrf_peaks(aes(y = fit - background), epsilon = 10)
 ```
 
 
