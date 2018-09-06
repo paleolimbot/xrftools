@@ -5,6 +5,7 @@
 \alias{x_ray_cross_sections}
 \alias{x_ray_fluorescence_yields}
 \alias{x_ray_emission_probabilities}
+\alias{x_ray_coster_kronig_probabilities}
 \title{EADL97 Atomic data}
 \format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 13776 rows and 5 columns.}
 \source{
@@ -17,6 +18,8 @@ x_ray_cross_sections
 x_ray_fluorescence_yields
 
 x_ray_emission_probabilities
+
+x_ray_coster_kronig_probabilities
 }
 \description{
 Data from the EADL97 database.

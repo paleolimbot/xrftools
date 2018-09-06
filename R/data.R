@@ -2,9 +2,7 @@
 #' Elemental X-ray energies and intensities
 #'
 #' Transition energies that may be found in X-Ray spectra and that may be useful in the analysis
-#' of XRF data. This dataset (from NIST 2018) includes the KL2 (Kalpha2), KL3 (Kalpha1), KM2 (Kbeta3), KM3 (Kbeta1),
-#' KM4 (Kbeta5 II), KM5 (Kbeta5 I), KN2 (Kbeta2 II), KN3 (Kbeta2 I), KN4 (Kbeta4 II), KN5 (Kbeta4 I),
-#' L2M4 (Lbeta1), L3M4 (Lalpha2), L3M5 (Lalpha1), and L3N5 (Lbeta2) transition energies
+#' of XRF data. This dataset (from NIST 2018) includes most transition energies
 #' for all elements. References in the \code{ref} column can be found at the
 #' \href{NIST X-Ray Transitions Database References}{https://physics.nist.gov/PhysRefData/XrayTrans/Html/refs.html}
 #' page. Relative intensities are not available for most transitions, but where they are they are provided
@@ -53,6 +51,8 @@
 #' @rdname x_ray_cross_sections
 "x_ray_emission_probabilities"
 
+#' @rdname x_ray_cross_sections
+"x_ray_coster_kronig_probabilities"
 
 #' XRF quantification energies
 #'

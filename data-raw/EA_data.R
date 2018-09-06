@@ -124,7 +124,14 @@ x_ray_fluorescence_yields <- shell_constants %>%
   rename(fluorescence_yield = value) %>%
   select(element, z, shell, fluorescence_yield)
 
+x_ray_coster_kronig_probabilities <- shell_constants %>%
+  filter(str_detect(param, "^f")) %>%
+  extract(section_title, "shell", "\\s+([LM][1234])") %>%
+  filter(value > 0) %>%
+  select(element, z, shell, coster_kronig_trans = param, coster_kronig_prob = value)
+
 # devtools::use_data(x_ray_binding_energies, overwrite = TRUE)
 devtools::use_data(x_ray_cross_sections, overwrite = TRUE)
 devtools::use_data(x_ray_emission_probabilities, overwrite = TRUE)
 devtools::use_data(x_ray_fluorescence_yields, overwrite = TRUE)
+devtools::use_data(x_ray_coster_kronig_probabilities, overwrite = TRUE)
