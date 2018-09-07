@@ -87,120 +87,54 @@ Deconvolution
 -------------
 
 ``` r
-spec_simple <- specs %>%
-  slice(7) %>%
+deconvoluted <- specs %>%
+  filter(ConditionSet == "Omnian2") %>%
   xrf_add_baseline_snip(.values = .spectra$cps, iterations = 20) %>%
   xrf_add_smooth_filter(filter = xrf_filter_gaussian(width = 7, alpha = 2.5), .iter = 5) %>%
-  pull(.spectra) %>%
-  first() %>%
-  filter(energy_kev <= 7.5)
+  xrf_add_deconvolution_gls(energy_max_kev = 7.5, peaks = xrf_energies("major"))
 
-rel_peaks <- xrf_energies("major", beam_energy_kev = 10) %>%
-  mutate(
-    jump_ratio = xrf_absorption_jump_ratio(element, edge),
-    transition_prob = xrf_transition_probability(element, trans),
-    yield = xrf_fluorescence_yield(element, edge),
-    excitation_factor = jump_ratio * transition_prob * yield
-  ) %>%
-  group_by(element) %>%
-  mutate(q_norm = excitation_factor / max(excitation_factor)) %>%
-  ungroup() %>%
-  arrange(element, desc(q_norm)) %>%
-  select(element, trans, trans_siegbahn, q_norm, everything())
+certified_vals <- system.file("spectra_files/oreas_concentrations.csv", package = "xrf") %>%
+  read_csv(col_types = cols(standard = col_character(), value = col_double(), .default = col_guess())) %>%
+  filter(method == "4-Acid Digestion") %>%
+  select(SampleIdent = standard, element, certified_value = value)
 
-g <- function(x, mu = 0, sigma = 1, height = 1) height * exp(-0.5 * ((x - mu) / sigma) ^ 2)
+deconv <- deconvoluted %>% 
+  xrf_despectra() %>% 
+  unnest(map(.data$.deconvolution, "peaks")) %>%
+  select(SampleIdent, ConditionSet, kV, element, height, peak_area, peak_area_se)
 
-responses_raw <- rel_peaks %>%
-  mutate(response = map2(energy_kev, q_norm, ~g(spec_simple$energy_kev, mu = .x, sigma = 0.05, height = .y))) %>%
-  group_by(element) %>%
-  summarise(response = list(reduce(response, `+`)), energy_kev = list(spec_simple$energy_kev)) %>%
-  ungroup() %>%
-  mutate(
-    # my guesses at making the things line up right
-    scale = unname(c(
-      "Al" = 10, "Ca" = 80, "Fe" = 5000, 
-      "K" = 50, "Mg" = 5, "Mn" = 40, 
-      "Na" = 5, "P" = 5, "Si"= 90, "Ti" = 420
-    )[element])
-  ) 
-
-# least squares estimation of coefficients
-# Allowing an intercept doesn't work well...produces lots of negative coeffs
-# intercept <- rep(1, length(spec_simple$energy_kev))
-X <- do.call(cbind, responses_raw$response)
-colnames(X) <- responses_raw$element
-df <- as_tibble(cbind(response = spec_simple$smooth - spec_simple$baseline, X))
-fit <- lm(response ~ 0 + ., data = df)
-
-responses_raw$scale_least_sq <- coefficients(fit)
-
-responses <- responses_raw %>%
-  unnest(response, energy_kev)
-
-ggplot(spec_simple, aes(energy_kev, smooth - baseline)) +
-  geom_line(aes(y = cps), alpha = 0.2) +
-  geom_line() +
-  geom_line(aes(y = response * scale_least_sq, col = element), data = responses) +
-  geom_hline(yintercept = 0, alpha = 0.2) +
-  stat_xrf_peaks(epsilon = 5, nudge_y = 20, element_list = "major") +
-  scale_y_sqrt()
+deconv %>%
+  left_join(certified_vals, by = c("SampleIdent", "element")) %>%
+  ggplot(aes(x = certified_value, y = peak_area, col = SampleIdent)) +
+  geom_point() +
+  facet_wrap(~element, scales = "free")
+#> Warning: Removed 11 rows containing missing values (geom_point).
 ```
 
 ![](README-unnamed-chunk-4-1.png)
 
 ``` r
-spec_simple2 <- specs %>%
-  slice(5) %>%
-  xrf_add_baseline_snip(.values = .spectra$cps, iterations = 15) %>%
-  xrf_add_smooth_filter(filter = xrf_filter_gaussian(width = 7, alpha = 2.5), .iter = 10) %>%
-  pull(.spectra) %>%
-  first() %>%
-  filter(energy_kev < 20, energy_kev > 5)
+deconv_spec <- deconvoluted %>%
+  xrf_despectra() %>%
+  unnest(map(.data$.deconvolution, "deconvolution"))
 
-rel_peaks <- xrf_energies(c("Pb", "As", "Cu", "Rb", "Zr", "Sr", "Fe"), beam_energy_kev = 20) %>%
-  mutate(
-    jump_ratio = xrf_absorption_jump_ratio(element, edge),
-    transition_prob = xrf_transition_probability(element, trans),
-    yield = xrf_fluorescence_yield(element, edge),
-    excitation_factor = jump_ratio * transition_prob * yield
-  ) %>%
-  group_by(element) %>%
-  mutate(q_norm = excitation_factor / max(excitation_factor)) %>%
-  ungroup() %>%
-  arrange(element, desc(q_norm)) %>%
-  select(element, trans, trans_siegbahn, q_norm, everything())
+deconv_spec_element <- deconv_spec %>%
+  select(.energy_kev, Al:Ti) %>%
+  gather(element, response, Al:Ti) %>%
+  left_join(deconv, by = "element")
 
-g <- function(x, mu = 0, sigma = 1, height = 1) height * exp(-0.5 * ((x - mu) / sigma) ^ 2)
-
-responses <- rel_peaks %>%
-  mutate(response = map2(energy_kev, q_norm, ~g(spec_simple2$energy_kev, mu = .x, sigma = 0.08, height = .y))) %>%
-  group_by(element) %>%
-  summarise(response = list(reduce(response, `+`)), energy_kev = list(spec_simple2$energy_kev)) %>%
-  ungroup() %>%
-  mutate(
-    scale = c("Pb" = 3, "As" = 1, "Cu" = 2, "Rb" = 25, "Zr" = 90, "Sr" = 8, "Fe" = 1200)[element]
-  ) %>%
-  unnest(response, energy_kev)
-
-ggplot(spec_simple2, aes(energy_kev, smooth - baseline)) +
-  geom_line(aes(y = cps), alpha = 0.2) +
-  geom_line() +
-  geom_line(aes(y = response * scale, col = element), data = responses) +
-  geom_hline(yintercept = 0, alpha = 0.2) +
-  stat_xrf_peaks(element_list = c("Pb", "As", "Cu", "Rb", "Zr", "Sr", "Fe"), nudge_y = 20) +
-  scale_y_sqrt()
+ggplot(deconv_spec, aes(.energy_kev)) +
+  geom_line(aes(y = .response), size = 0.2) +
+  geom_area(aes(x = .energy_kev, y = response * height, fill = element), deconv_spec_element, alpha = 0.5) +
+  facet_wrap(~SampleIdent) +
+  scale_y_sqrt() +
+  stat_xrf_peaks(aes(y = .response), size = 1.5, epsilon = 10, element_list = "major", nudge_y = 100)
+#> Warning in self$trans$transform(x): NaNs produced
+#> Warning: Transformation introduced infinite values in continuous y-axis
+#> Warning: Removed 13213 rows containing missing values (position_stack).
 ```
 
 ![](README-unnamed-chunk-5-1.png)
-
-Peaks
------
-
-$$
-y(i)=∑\_{j=1}^{n}h(i-j)x(j)+e(i)
-$$
-
-*x*<sup>(*k*)</sup>(*i*)=*M*<sup>(*k*)</sup>(*i*)*x*<sup>(*k* − 1)</sup>(*i*)
 
 ``` r
 spec <- specs %>%

@@ -83,61 +83,45 @@ specs %>%
 ## Deconvolution
 
 ```{r}
-spec_simple <- specs %>%
-  slice(7) %>%
+deconvoluted <- specs %>%
+  filter(ConditionSet == "Omnian2") %>%
   xrf_add_baseline_snip(.values = .spectra$cps, iterations = 20) %>%
   xrf_add_smooth_filter(filter = xrf_filter_gaussian(width = 7, alpha = 2.5), .iter = 5) %>%
-  pull(.spectra) %>%
-  first() %>%
-  filter(energy_kev <= 7.5)
+  xrf_add_deconvolution_gls(energy_max_kev = 7.5, peaks = xrf_energies("major"))
 
-deconv <- xrf_deconvolute_gaussian_least_squares(
-  spec_simple$energy_kev, 
-  spec_simple$smooth - spec_simple$baseline,
-  peaks = xrf_energies("lake_sediment")
-)
+certified_vals <- system.file("spectra_files/oreas_concentrations.csv", package = "xrf") %>%
+  read_csv(col_types = cols(standard = col_character(), value = col_double(), .default = col_guess())) %>%
+  filter(method == "4-Acid Digestion") %>%
+  select(SampleIdent = standard, element, certified_value = value)
 
-response <- deconv$deconvolution %>%
-  gather(element, response, -starts_with(".")) %>%
-  left_join(deconv$peaks, by = "element")
+deconv <- deconvoluted %>% 
+  xrf_despectra() %>% 
+  unnest(map(.data$.deconvolution, "peaks")) %>%
+  select(SampleIdent, ConditionSet, kV, element, height, peak_area, peak_area_se)
 
-ggplot(spec_simple, aes(energy_kev, smooth - baseline)) +
-  geom_line(aes(y = cps), alpha = 0.2) +
-  geom_line() +
-  geom_line(aes(x = .energy_kev, y = response * height, col = element), data = response) +
-  geom_line(aes(x = .energy_kev, y = .response_fit), data = deconv$deconvolution, col = "blue") +
-  geom_hline(yintercept = 0, alpha = 0.2) +
-  stat_xrf_peaks(element_list = "major", nudge_y = 50) +
-  scale_y_sqrt()
+deconv %>%
+  left_join(certified_vals, by = c("SampleIdent", "element")) %>%
+  ggplot(aes(x = certified_value, y = peak_area, col = SampleIdent)) +
+  geom_point() +
+  facet_wrap(~element, scales = "free")
 ```
 
 ```{r}
-spec_simple2 <- specs %>%
-  slice(5) %>%
-  xrf_add_baseline_snip(.values = .spectra$cps, iterations = 20) %>%
-  xrf_add_smooth_filter(filter = xrf_filter_gaussian(width = 7, alpha = 2.5), .iter = 10) %>%
-  pull(.spectra) %>%
-  first() %>%
-  filter(energy_kev < 20)
+deconv_spec <- deconvoluted %>%
+  xrf_despectra() %>%
+  unnest(map(.data$.deconvolution, "deconvolution"))
 
-deconv <- deconvolute_gaussian_least_squares(
-  spec_simple2$energy_kev, 
-  spec_simple2$smooth - spec_simple2$baseline,
-  peaks = xrf_energies("lake_sediment")
-)
+deconv_spec_element <- deconv_spec %>%
+  select(.energy_kev, Al:Ti) %>%
+  gather(element, response, Al:Ti) %>%
+  left_join(deconv, by = "element")
 
-response <- deconv$deconvolution %>%
-  gather(element, response, -starts_with(".")) %>%
-  left_join(deconv$peaks, by = "element")
-
-ggplot(spec_simple2, aes(energy_kev, smooth - baseline)) +
-  geom_line(aes(y = cps), alpha = 0.2) +
-  geom_line() +
-  geom_line(aes(x = .energy_kev, y = response * height, col = element), data = response) +
-  geom_line(aes(x = .energy_kev, y = .response_fit), data = deconv$deconvolution, col = "blue") +
-  geom_hline(yintercept = 0, alpha = 0.2) +
-  stat_xrf_peaks(element_list = "lake_sediment", nudge_y = 20) +
-  scale_y_sqrt()
+ggplot(deconv_spec, aes(.energy_kev)) +
+  geom_line(aes(y = .response), size = 0.2) +
+  geom_area(aes(x = .energy_kev, y = response * height, fill = element), deconv_spec_element, alpha = 0.5) +
+  facet_wrap(~SampleIdent) +
+  scale_y_sqrt() +
+  stat_xrf_peaks(aes(y = .response), size = 1.5, epsilon = 10, element_list = "major", nudge_y = 100)
 ```
 
 ```{r, eval=FALSE}
