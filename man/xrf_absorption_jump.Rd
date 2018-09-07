@@ -6,6 +6,7 @@
 \alias{xrf_transition_probability}
 \alias{xrf_fluorescence_yield}
 \alias{xrf_coster_kronig_probability}
+\alias{xrf_relative_peak_intensity}
 \title{Physical parameters of electron shell transitions}
 \usage{
 xrf_absorption_jump(element, shell, method = "viegele")
@@ -18,6 +19,8 @@ xrf_fluorescence_yield(element, shell, method = "EADL97")
 
 xrf_coster_kronig_probability(element, shell, coster_kronig_trans,
   method = "EADL97")
+
+xrf_relative_peak_intensity(element, shell, trans, beam_energy_kev = 50)
 }
 \arguments{
 \item{element}{An element symbol or atomic number}
@@ -30,6 +33,9 @@ and EADL97 tables are used for other parameters.}
 \item{trans}{A transition (e.g., KL2).}
 
 \item{coster_kronig_trans}{A sub-transition according to Coster-Kronig (1935).}
+
+\item{beam_energy_kev}{The beam energy used to excite the electrons. Currently unused, but
+should be incorporated into the calculation.}
 }
 \value{
 A vector of numerics
@@ -50,6 +56,10 @@ See also \link{x_ray_emission_probabilities}.
 Fluorescence yields are the probability of emission of x-radiation rather than
 an Auger electron. Generally given the letter omega sub [K, L1, L2, L3]. For
 L shells, there are also Coster-Kronig (1935) transitions.
+
+xrf_relative_peak_intensity attempts to combine these functions to estimate
+the relative intensities of various peaks. This is an important input for
+deconvolution, and needs to be tweaked based on sample size.
 }
 \examples{
 # absorption jump ratio

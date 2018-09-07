@@ -80,15 +80,65 @@ specs %>%
   geom_line(aes(y = smooth - baseline, col = "smooth"))
 ```
 
-## Peaks
+## Deconvolution
 
-$$
-y(i)=∑_{j=1}^{n}h(i-j)x(j)+e(i)
-$$
+```{r}
+spec_simple <- specs %>%
+  slice(7) %>%
+  xrf_add_baseline_snip(.values = .spectra$cps, iterations = 20) %>%
+  xrf_add_smooth_filter(filter = xrf_filter_gaussian(width = 7, alpha = 2.5), .iter = 5) %>%
+  pull(.spectra) %>%
+  first() %>%
+  filter(energy_kev <= 7.5)
 
-$$
-x^{(k)}(i)=M^{(k)}(i)x^{(k-1)}(i)
-$$
+deconv <- xrf_deconvolute_gaussian_least_squares(
+  spec_simple$energy_kev, 
+  spec_simple$smooth - spec_simple$baseline,
+  peaks = xrf_energies("lake_sediment")
+)
+
+response <- deconv$deconvolution %>%
+  gather(element, response, -starts_with(".")) %>%
+  left_join(deconv$peaks, by = "element")
+
+ggplot(spec_simple, aes(energy_kev, smooth - baseline)) +
+  geom_line(aes(y = cps), alpha = 0.2) +
+  geom_line() +
+  geom_line(aes(x = .energy_kev, y = response * height, col = element), data = response) +
+  geom_line(aes(x = .energy_kev, y = .response_fit), data = deconv$deconvolution, col = "blue") +
+  geom_hline(yintercept = 0, alpha = 0.2) +
+  stat_xrf_peaks(element_list = "major", nudge_y = 50) +
+  scale_y_sqrt()
+```
+
+```{r}
+spec_simple2 <- specs %>%
+  slice(5) %>%
+  xrf_add_baseline_snip(.values = .spectra$cps, iterations = 20) %>%
+  xrf_add_smooth_filter(filter = xrf_filter_gaussian(width = 7, alpha = 2.5), .iter = 10) %>%
+  pull(.spectra) %>%
+  first() %>%
+  filter(energy_kev < 20)
+
+deconv <- deconvolute_gaussian_least_squares(
+  spec_simple2$energy_kev, 
+  spec_simple2$smooth - spec_simple2$baseline,
+  peaks = xrf_energies("lake_sediment")
+)
+
+response <- deconv$deconvolution %>%
+  gather(element, response, -starts_with(".")) %>%
+  left_join(deconv$peaks, by = "element")
+
+ggplot(spec_simple2, aes(energy_kev, smooth - baseline)) +
+  geom_line(aes(y = cps), alpha = 0.2) +
+  geom_line() +
+  geom_line(aes(x = .energy_kev, y = response * height, col = element), data = response) +
+  geom_line(aes(x = .energy_kev, y = .response_fit), data = deconv$deconvolution, col = "blue") +
+  geom_hline(yintercept = 0, alpha = 0.2) +
+  stat_xrf_peaks(element_list = "lake_sediment", nudge_y = 20) +
+  scale_y_sqrt()
+```
 
 ```{r, eval=FALSE}
 spec <- specs %>%
@@ -135,7 +185,7 @@ oreas22d <- specs %>%
   unnest(.spectra) %>%
   mutate(cps = counts / LiveTime)
 
-xrf_en <- xrf_energies %>%
+xrf_en <- x_ray_xrf_energies %>%
   crossing(tibble(ConditionSet = unique(oreas22d$ConditionSet))) %>%
   group_by(ConditionSet) %>%
   mutate(

@@ -56,8 +56,8 @@
 
 #' XRF quantification energies
 #'
-#' Common energies used to quantify elements in XRF, including edge energies (energy
-#' needed to produce that line on the spectrum).
+#' A form of \link{x_ray_energies} in a more suitable form for XRF quantification.
+#' Best accessed via \link{xrf_energies}.
 #'
 #' @source
 #' NIST (2018), EADL97. See \link{x_ray_energies} and \link{x_ray_emission_probabilities}.
@@ -66,29 +66,7 @@
 #' National Institute of Standards and Technology (NIST): X-Ray Transition Energies Database.
 #' Retrieved August 2018. \url{https://physics.nist.gov/PhysRefData/XrayTrans/Html/search.html}.
 #'
-"xrf_energies"
-
-#' Get XRF energies for selected elements
-#'
-#' @param elements Elements or element lists (passed to \link{xrf_element_list}).
-#' @param beam_energy_kev Beam energy
-#' @param ... Used to further \link[dplyr]{filter} the result.
-#'
-#' @return A subset of \link{xrf_energies}
-#' @export
-#'
-#' @examples
-#' xrf_get_energies("major", 25)
-#'
-xrf_get_energies <- function(elements = "everything", beam_energy_kev = Inf, ...) {
-  elements <- xrf_element_list(elements)
-  xrf::xrf_energies %>%
-    dplyr::filter(
-      .data$element %in% !!elements,
-      .data$edge_kev <= !!beam_energy_kev,
-      ...
-    )
-}
+"x_ray_xrf_energies"
 
 #' Read XRF example spectra
 #'

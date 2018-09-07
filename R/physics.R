@@ -16,11 +16,17 @@
 #' an Auger electron. Generally given the letter omega sub [K, L1, L2, L3]. For
 #' L shells, there are also Coster-Kronig (1935) transitions.
 #'
+#' xrf_relative_peak_intensity attempts to combine these functions to estimate
+#' the relative intensities of various peaks. This is an important input for
+#' deconvolution, and needs to be tweaked based on sample size.
+#'
 #'
 #' @param element An element symbol or atomic number
 #' @param shell A valid electron shell (K, L1, L2, L3). Invalid shells are silently ignored.
 #' @param trans A transition (e.g., KL2).
 #' @param coster_kronig_trans A sub-transition according to Coster-Kronig (1935).
+#' @param beam_energy_kev The beam energy used to excite the electrons. Currently unused, but
+#'   should be incorporated into the calculation.
 #' @param method Only the Viegele (1973) method is currently supported for xrf_absorption_jump,
 #'   and EADL97 tables are used for other parameters.
 #'
@@ -120,4 +126,49 @@ xrf_coster_kronig_probability <- function(element, shell, coster_kronig_trans, m
   tibble::tibble(element = element, shell = shell, coster_kronig_trans = coster_kronig_trans) %>%
     dplyr::left_join(xrf::x_ray_coster_kronig_probabilities, by = c("element", "shell", "coster_kronig_trans")) %>%
     dplyr::pull("coster_kronig_prob")
+}
+
+#' @rdname xrf_absorption_jump
+#' @export
+xrf_relative_peak_intensity <- function(element, shell, trans, beam_energy_kev = 50) {
+  xrf_absorption_jump_ratio(element, shell) *
+    xrf_transition_probability(element, trans) *
+    xrf_fluorescence_yield(element, shell)
+}
+
+#' Get XRF energies for selected elements
+#'
+#' @param elements Elements or element lists (passed to \link{xrf_element_list}).
+#' @param beam_energy_kev Beam energy, used to filter the list and calculate relative peak intensities.
+#' @param min_relative_intensity Smallest peak to include, relatie to the maximum peak for a given
+#'   element.
+#' @param ... Used to further \link[dplyr]{filter} the result.
+#'
+#' @return A subset of \link{x_ray_xrf_energies} with some additional information based on the beam energy.
+#' @export
+#'
+#' @examples
+#' xrf_energies("major", 25)
+#'
+xrf_energies <- function(elements = "everything", beam_energy_kev = 50, ..., min_relative_intensity = 0.01) {
+  elements <- xrf_element_list(elements)
+
+  xrf::x_ray_xrf_energies %>%
+    dplyr::mutate(
+      relative_peak_intensity = xrf_relative_peak_intensity(
+        .data$element, .data$edge, .data$trans, !!beam_energy_kev
+      )
+    ) %>%
+    filter(!is.na(.data$relative_peak_intensity)) %>%
+    dplyr::group_by(.data$element) %>%
+    dplyr::mutate(relative_peak_intensity = .data$relative_peak_intensity / max(.data$relative_peak_intensity)) %>%
+    dplyr::filter(
+      .data$element %in% !!elements,
+      .data$edge_kev <= !!beam_energy_kev,
+      .data$relative_peak_intensity >= min_relative_intensity,
+      ...
+    ) %>%
+    dplyr::ungroup() %>%
+    dplyr::arrange(.data$z, dplyr::desc(.data$relative_peak_intensity)) %>%
+    dplyr::select("element", "trans", "trans_siegbahn", "energy_kev", "relative_peak_intensity", dplyr::everything())
 }

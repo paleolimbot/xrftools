@@ -50,7 +50,7 @@ fortify.spectra <- function(model, data = NULL, ...) {
 #' @param position Position for layer
 #' @param ... Passed to \link[ggrepel]{geom_label_repel}. \code{nudge_y} is particularly useful.
 #' @param element_list An element list (sanitized using \link{xrf_element_list})
-#' @param energy_subset Used to subset \link{xrf_energies}.
+#' @param energy_subset Used to subset \link{x_ray_xrf_energies}.
 #' @param box.padding,size Passed to \link[ggrepel]{geom_label_repel}
 #' @param epsilon Minimum peak height to label
 #' @param inherit.aes Inherit aesthetics from ggplot()?
@@ -83,18 +83,27 @@ StatXrfPeaks <- ggplot2::ggproto(
   ggplot2::Stat,
   required_aes = c("x", "y"),
   compute_panel = function(self, data, scales, element_list = "everything", epsilon = 0.01,
-                           energy_subset = rlang::quo(NULL)) {
+                           energy_subset = rlang::quo(NULL), res = 0.01) {
     if (is.null(data) || (nrow(data) == 0)) return(data.frame())
 
-    energies <- xrf_get_energies(element_list)
+    energies <- xrf_energies(element_list)
     if(!rlang::quo_is_null(energy_subset)) {
       energies <- dplyr::filter(energies, !!energy_subset)
     }
 
     energies <- energies %>%
-      dplyr::filter(.data$energy_kev > min(!!data$x, na.rm = TRUE), .data$energy_kev < max(!!data$y)) %>%
+      dplyr::filter(.data$energy_kev > min(!!data$x, na.rm = TRUE), .data$energy_kev < max(!!data$x)) %>%
       dplyr::mutate(label = paste(.data$element, .data$trans_siegbahn)) %>%
       dplyr::select(x = "energy_kev", "label")
+
+    # bin energies so that nearly simultaneous peaks don't pile up
+    # res is supposed to be a percentage of the data...so 0.01 means max 100 peak labels on plot
+    res_kev <- (max(data$x) - min(data$x)) * res
+    energies <- energies %>%
+      dplyr::mutate(x = round(.data$x / !!res_kev) * !!res_kev) %>%
+      dplyr::group_by(.data$x) %>%
+      dplyr::summarise(label = paste(.data$label, collapse = "\n")) %>%
+      dplyr::ungroup()
 
     data_nest <- data %>%
       dplyr::group_by(.data$group) %>%
@@ -109,6 +118,3 @@ StatXrfPeaks <- ggplot2::ggproto(
     energies %>% dplyr::filter(.data$y > epsilon)
   }
 )
-
-
-

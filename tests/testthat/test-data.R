@@ -6,7 +6,9 @@ test_that("read_example filters and slices its output", {
 })
 
 test_that("xrf energy extractor works", {
-  expect_identical(xrf_get_energies(), xrf_energies)
-  expect_identical(xrf_get_energies(beam_energy_kev = 0), xrf_energies %>% dplyr::slice(0))
-  expect_setequal(xrf_get_energies(c("Pb", "Cu", "Zn"))$element, c("Pb", "Cu", "Zn"))
+  expect_equal(
+    xrf_energies(beam_energy_kev = 0) %>% dplyr::select(-relative_peak_intensity),
+    x_ray_xrf_energies %>% dplyr::slice(0)
+  )
+  expect_setequal(xrf_energies(c("Pb", "Cu", "Zn"))$element, c("Pb", "Cu", "Zn"))
 })

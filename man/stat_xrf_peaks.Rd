@@ -24,7 +24,7 @@ StatXrfPeaks
 
 \item{element_list}{An element list (sanitized using \link{xrf_element_list})}
 
-\item{energy_subset}{Used to subset \link{xrf_energies}.}
+\item{energy_subset}{Used to subset \link{x_ray_xrf_energies}.}
 
 \item{epsilon}{Minimum peak height to label}
 
