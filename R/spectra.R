@@ -137,6 +137,13 @@ select.spectra <- function(.data, ...) {
   out
 }
 
+#' @importFrom tidyr unnest
+#' @export
+unnest.spectra <- function(data, ...) {
+  # something about the implementation of the above methods leads to errors in unnest()
+  tidyr::unnest(xrf_despectra(data), ...)
+}
+
 #' Combine XRF spectra
 #'
 #' Behaviour is identical to \link[dplyr]{bind_rows}.

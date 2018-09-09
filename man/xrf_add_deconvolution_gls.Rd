@@ -8,10 +8,10 @@
 xrf_add_deconvolution_gls(.spectra, .energy_kev = .data$.spectra$energy_kev,
   .values = .data$.spectra$cps - .data$.spectra$baseline,
   energy_min_kev = -Inf, energy_max_kev = Inf, peaks = xrf_energies(),
-  sigma = 0.07, .env = parent.frame())
+  default_sigma = 0.07, .env = parent.frame())
 
 xrf_deconvolute_gaussian_least_squares(energy_kev, response,
-  peaks = xrf_energies(), sigma = 0.07, energy_min_kev = -Inf,
+  peaks = xrf_energies(), default_sigma = 0.07, energy_min_kev = -Inf,
   energy_max_kev = Inf)
 }
 \arguments{
@@ -23,7 +23,8 @@ xrf_deconvolute_gaussian_least_squares(energy_kev, response,
 
 \item{peaks}{A data frame of columns with columns "element", "}
 
-\item{sigma}{The standard deviation of the peaks.}
+\item{default_sigma}{The default standard deviation of the peaks (can also be passed in as
+a columm in \code{peaks} if this value varies between peaks)}
 
 \item{.env}{Calling environment}
 

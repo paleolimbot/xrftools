@@ -88,10 +88,14 @@ Deconvolution
 
 ``` r
 deconvoluted <- specs %>%
-  filter(ConditionSet == "Omnian2") %>%
-  xrf_add_baseline_snip(.values = .spectra$cps, iterations = 20) %>%
-  xrf_add_smooth_filter(filter = xrf_filter_gaussian(width = 7, alpha = 2.5), .iter = 5) %>%
-  xrf_add_deconvolution_gls(energy_max_kev = 7.5, peaks = xrf_energies("major"))
+  filter(ConditionSet %in% c("Omnian", "Omnian2")) %>%
+  xrf_add_smooth_filter(filter = xrf_filter_gaussian(width = 5), .iter = 20) %>%
+  xrf_add_baseline_snip(.values = .spectra$smooth, iterations = 20) %>%
+  xrf_add_deconvolution_gls(
+    .spectra$energy_kev, 
+    .spectra$smooth - .spectra$baseline, 
+    energy_max_kev = kV * 0.75, peaks = xrf_energies("major")
+  )
 
 certified_vals <- system.file("spectra_files/oreas_concentrations.csv", package = "xrf") %>%
   read_csv(col_types = cols(standard = col_character(), value = col_double(), .default = col_guess())) %>%
@@ -99,39 +103,43 @@ certified_vals <- system.file("spectra_files/oreas_concentrations.csv", package 
   select(SampleIdent = standard, element, certified_value = value)
 
 deconv <- deconvoluted %>% 
-  xrf_despectra() %>% 
-  unnest(map(.data$.deconvolution, "peaks")) %>%
+  unnest(.deconvolution_peaks) %>%
   select(SampleIdent, ConditionSet, kV, element, height, peak_area, peak_area_se)
 
 deconv %>%
   left_join(certified_vals, by = c("SampleIdent", "element")) %>%
-  ggplot(aes(x = certified_value, y = peak_area, col = SampleIdent)) +
+  ggplot(aes(x = certified_value, y = peak_area, col = SampleIdent, shape = ConditionSet)) +
+  geom_errorbar(aes(ymin = peak_area - peak_area_se, ymax = peak_area + peak_area_se)) +
   geom_point() +
-  facet_wrap(~element, scales = "free")
-#> Warning: Removed 11 rows containing missing values (geom_point).
+  facet_wrap(~element, scales = "free") +
+  theme_bw(10)
+#> Warning: Removed 22 rows containing missing values (geom_errorbar).
+#> Warning: Removed 22 rows containing missing values (geom_point).
 ```
 
 ![](README-unnamed-chunk-4-1.png)
 
 ``` r
-deconv_spec <- deconvoluted %>%
-  xrf_despectra() %>%
-  unnest(map(.data$.deconvolution, "deconvolution"))
+deconv_element <- deconvoluted %>%
+  unnest(.deconvolution_components)
 
-deconv_spec_element <- deconv_spec %>%
-  select(.energy_kev, Al:Ti) %>%
-  gather(element, response, Al:Ti) %>%
-  left_join(deconv, by = "element")
-
-ggplot(deconv_spec, aes(.energy_kev)) +
-  geom_line(aes(y = .response), size = 0.2) +
-  geom_area(aes(x = .energy_kev, y = response * height, fill = element), deconv_spec_element, alpha = 0.5) +
-  facet_wrap(~SampleIdent) +
+ggplot() +
+  geom_line(
+    aes(x = energy_kev, y = response), 
+    data = deconvoluted %>% unnest(.deconvolution_response), 
+    size = 0.2
+  ) +
+  geom_area(
+    aes(x = energy_kev, y = response_fit, fill = element), 
+    data = deconvoluted %>% unnest(.deconvolution_components), 
+    alpha = 0.5
+  ) +
+  facet_wrap(~ConditionSet + SampleIdent, scales = "free") +
   scale_y_sqrt() +
-  stat_xrf_peaks(aes(y = .response), size = 1.5, epsilon = 10, element_list = "major", nudge_y = 100)
+  theme_bw(10)
 #> Warning in self$trans$transform(x): NaNs produced
 #> Warning: Transformation introduced infinite values in continuous y-axis
-#> Warning: Removed 13213 rows containing missing values (position_stack).
+#> Warning: Removed 4504 rows containing missing values (position_stack).
 ```
 
 ![](README-unnamed-chunk-5-1.png)

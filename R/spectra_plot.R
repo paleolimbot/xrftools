@@ -84,7 +84,9 @@ StatXrfPeaks <- ggplot2::ggproto(
   required_aes = c("x", "y"),
   compute_panel = function(self, data, scales, element_list = "everything", epsilon = 0.01,
                            energy_subset = rlang::quo(NULL), res = 0.01) {
-    if (is.null(data) || (nrow(data) == 0)) return(data.frame())
+    if (is.null(data) || nrow(data) == 0 || ncol(data) == 0) {
+      return(data.frame())
+    }
 
     energies <- xrf_energies(element_list)
     if(!rlang::quo_is_null(energy_subset)) {
