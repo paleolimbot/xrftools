@@ -1,14 +1,17 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-xrf
-===
 
-[![Travis-CI Build Status](https://travis-ci.org/paleolimbot/xrf.svg?branch=master)](https://travis-ci.org/paleolimbot/xrf) [![Coverage status](https://codecov.io/gh/paleolimbot/xrf/branch/master/graph/badge.svg)](https://codecov.io/github/paleolimbot/xrf?branch=master)
+# xrf
 
-The goal of xrf is to provide tools to read, plot, and interpret X-Ray fluorescence spectra.
+[![Travis-CI Build
+Status](https://travis-ci.org/paleolimbot/xrf.svg?branch=master)](https://travis-ci.org/paleolimbot/xrf)
+[![Coverage
+status](https://codecov.io/gh/paleolimbot/xrf/branch/master/graph/badge.svg)](https://codecov.io/github/paleolimbot/xrf?branch=master)
 
-Installation
-------------
+The goal of xrf is to provide tools to read, plot, and interpret X-Ray
+fluorescence spectra.
+
+## Installation
 
 You can install xrf from github with:
 
@@ -17,8 +20,7 @@ You can install xrf from github with:
 devtools::install_github("paleolimbot/xrf")
 ```
 
-Example
--------
+## Example
 
 Read in a Panalytical XRF spectrum and plot it.
 
@@ -42,12 +44,14 @@ specs %>%
   facet_wrap(vars(ConditionSet), scales = "free_y")
 ```
 
-![](README-example-1.png)
+![](README-example-1.png)<!-- -->
 
-Baselines
----------
+## Baselines
 
-The **xrf** package can use several existing methods for estimating "background" or "baseline" values. The most useful of these for XRF spectra is the Sensitive Nonlinear Iterative Peak (SNIP) method, implemented in the **Peaks** package.
+The **xrf** package can use several existing methods for estimating
+“background” or “baseline” values. The most useful of these for XRF
+spectra is the Sensitive Nonlinear Iterative Peak (SNIP) method,
+implemented in the **Peaks** package.
 
 ``` r
 specs %>%
@@ -60,13 +64,13 @@ specs %>%
   geom_line(aes(y = cps, col = "raw")) +
   geom_line(aes(y = baseline, col = "baseline")) +
   geom_line(aes(y = cps - baseline, col = "cps - baseline"))
-#> Warning: package 'bindrcpp' was built under R version 3.4.4
+#> Warning: `cols` is now required when using unnest().
+#> Please use `cols = c(.spectra)`
 ```
 
-![](README-unnamed-chunk-2-1.png)
+![](README-unnamed-chunk-2-1.png)<!-- -->
 
-Smoothing
----------
+## Smoothing
 
 ``` r
 specs %>%
@@ -79,12 +83,13 @@ specs %>%
   ggplot(aes(x = energy_kev)) +
   geom_line(aes(y = cps, col = "raw"), alpha = 0.3) +
   geom_line(aes(y = smooth - baseline, col = "smooth"))
+#> Warning: `cols` is now required when using unnest().
+#> Please use `cols = c(.spectra)`
 ```
 
-![](README-unnamed-chunk-3-1.png)
+![](README-unnamed-chunk-3-1.png)<!-- -->
 
-Deconvolution
--------------
+## Deconvolution
 
 ``` r
 deconvoluted <- specs %>%
@@ -113,11 +118,10 @@ deconv %>%
   geom_point() +
   facet_wrap(~element, scales = "free") +
   theme_bw(10)
-#> Warning: Removed 22 rows containing missing values (geom_errorbar).
 #> Warning: Removed 22 rows containing missing values (geom_point).
 ```
 
-![](README-unnamed-chunk-4-1.png)
+![](README-unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 deconv_element <- deconvoluted %>%
@@ -142,7 +146,7 @@ ggplot() +
 #> Warning: Removed 4504 rows containing missing values (position_stack).
 ```
 
-![](README-unnamed-chunk-5-1.png)
+![](README-unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 spec <- specs %>%

@@ -10,7 +10,8 @@ theme_set(theme_bw())
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "README-",
+  dpi = 300
 )
 ```
 
