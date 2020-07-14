@@ -1,6 +1,6 @@
-Package: xrf
-Title: XRF tools for R
-Version: 0.0.0.9000
+Package: xrftools
+Title: XRF Tools for R
+Version: 0.0.1.9000
 Authors@R: person("Dewey", "Dunnington", email = "dewey@fishandwhistle.net", role = c("aut", "cre"))
 Description: Work with XRF spectra for quantitative or qualitative analysis.
 Depends: R (>= 3.4.0)
@@ -29,6 +29,6 @@ Suggests:
     covr
 RoxygenNote: 7.1.1
 Remotes: cran/Peaks
-URL: https://github.com/paleolimbot/xrf
-BugReports: https://github.com/paleolimbot/xrf/issues
+URL: https://github.com/paleolimbot/xrftools
+BugReports: https://github.com/paleolimbot/xrftools/issues
 LinkingTo: Rcpp

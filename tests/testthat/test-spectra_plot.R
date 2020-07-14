@@ -7,7 +7,7 @@ test_that("plots are generated", {
   expect_is(pan %>% dplyr::slice(1) %>% ggplot2::autoplot(), "ggplot")
 
   print(
-    xrf:::autoplot.spectra(
+    xrftools:::autoplot.spectra(
       pan, energy_kev < kV,
       y = smooth - baseline,
       col = SampleIdent, facet = ConditionSet

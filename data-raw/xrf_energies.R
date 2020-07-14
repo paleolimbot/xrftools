@@ -1,6 +1,6 @@
 
 library(tidyverse)
-library(xrf)
+library(xrftools)
 
 xrf_edges <- x_ray_energies %>%
   filter(str_detect(trans, "edge")) %>%

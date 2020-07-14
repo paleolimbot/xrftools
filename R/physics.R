@@ -95,7 +95,7 @@ xrf_transition_probability <- function(element, trans, method = "EADL97") {
   stopifnot(is.character(trans))
 
   tibble::tibble(element = element, trans = trans) %>%
-    dplyr::left_join(xrf::x_ray_emission_probabilities, by = c("element", "trans")) %>%
+    dplyr::left_join(xrftools::x_ray_emission_probabilities, by = c("element", "trans")) %>%
     dplyr::pull("emission_probability")
 }
 
@@ -110,7 +110,7 @@ xrf_fluorescence_yield <- function(element, shell, method = "EADL97") {
   stopifnot(is.character(shell))
 
   tibble::tibble(element = element, shell = shell) %>%
-    dplyr::left_join(xrf::x_ray_fluorescence_yields, by = c("element", "shell")) %>%
+    dplyr::left_join(xrftools::x_ray_fluorescence_yields, by = c("element", "shell")) %>%
     dplyr::pull("fluorescence_yield")
 }
 
@@ -124,7 +124,7 @@ xrf_coster_kronig_probability <- function(element, shell, coster_kronig_trans, m
   stopifnot(is.character(shell))
 
   tibble::tibble(element = element, shell = shell, coster_kronig_trans = coster_kronig_trans) %>%
-    dplyr::left_join(xrf::x_ray_coster_kronig_probabilities, by = c("element", "shell", "coster_kronig_trans")) %>%
+    dplyr::left_join(xrftools::x_ray_coster_kronig_probabilities, by = c("element", "shell", "coster_kronig_trans")) %>%
     dplyr::pull("coster_kronig_prob")
 }
 
@@ -153,7 +153,7 @@ xrf_relative_peak_intensity <- function(element, shell, trans, beam_energy_kev =
 xrf_energies <- function(elements = "everything", beam_energy_kev = 50, ..., min_relative_intensity = 0.01) {
   elements <- xrf_element_list(elements)
 
-  xrf::x_ray_xrf_energies %>%
+  xrftools::x_ray_xrf_energies %>%
     dplyr::mutate(
       relative_peak_intensity = xrf_relative_peak_intensity(
         .data$element, .data$edge, .data$trans, !!beam_energy_kev

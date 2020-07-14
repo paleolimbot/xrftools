@@ -4,9 +4,9 @@ test_that("test deconvolution", {
 
   test_df <- tibble::tibble(
     energy_kev = seq(1, 30, 0.1),
-    response = xrf:::gaussian_fun(energy_kev, mu = 5, sigma = 1, height = 4) +
-      xrf:::gaussian_fun(energy_kev, mu = 10, sigma = 2, height = 2) +
-      xrf:::gaussian_fun(energy_kev, mu = 15, sigma = 0.5, height = 1) +
+    response = xrftools:::gaussian_fun(energy_kev, mu = 5, sigma = 1, height = 4) +
+      xrftools:::gaussian_fun(energy_kev, mu = 10, sigma = 2, height = 2) +
+      xrftools:::gaussian_fun(energy_kev, mu = 15, sigma = 0.5, height = 1) +
       rnorm(length(energy_kev), mean = 0, sd = 0.05)
   )
 

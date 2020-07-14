@@ -86,7 +86,7 @@ x_ray_cross_sections <- read_specfile("data-raw/EPDL97_CrossSections.dat") %>%
 
 # a <- x_ray_cross_sections %>%
 #   filter(element == "Fe", energy_kev == 10)
-# xrf::x_ray_transitions %>%
+# xrftools::x_ray_transitions %>%
 #   select(-trans_siegbahn) %>%
 #   mutate(trans = as_factor(trans)) %>%
 #   crossing(., .) %>%

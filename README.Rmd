@@ -15,19 +15,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-# xrf
+# xrftools
 
 [![Travis-CI Build Status](https://travis-ci.org/paleolimbot/xrf.svg?branch=master)](https://travis-ci.org/paleolimbot/xrf) [![Coverage status](https://codecov.io/gh/paleolimbot/xrf/branch/master/graph/badge.svg)](https://codecov.io/github/paleolimbot/xrf?branch=master)
 
-The goal of xrf is to provide tools to read, plot, and interpret X-Ray fluorescence spectra.
+The goal of xrftools is to provide tools to read, plot, and interpret X-Ray fluorescence spectra.
 
 ## Installation
 
-You can install xrf from github with:
+You can install xrftools from github with:
 
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("paleolimbot/xrf")
+# install.packages("remotes")
+remotes::install_github("paleolimbot/xrftools")
 ```
 
 ## Example
@@ -36,7 +36,7 @@ Read in a Panalytical XRF spectrum and plot it.
 
 ```{r example}
 library(tidyverse)
-library(xrf)
+library(xrftools)
 
 pan_example_dir <- system.file("spectra_files/Panalytical", package = "xrf")
 pan_files <- list.files(pan_example_dir, ".mp2", full.names = TRUE)

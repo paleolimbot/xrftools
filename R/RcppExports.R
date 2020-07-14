@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 discreteFilter <- function(x, f, scale, tails) {
-    .Call('_xrf_discreteFilter', PACKAGE = 'xrf', x, f, scale, tails)
+    .Call('_xrftools_discreteFilter', PACKAGE = 'xrftools', x, f, scale, tails)
 }
 
 discreteFilterIterative <- function(x, f, iterations, epsilon) {
-    .Call('_xrf_discreteFilterIterative', PACKAGE = 'xrf', x, f, iterations, epsilon)
+    .Call('_xrftools_discreteFilterIterative', PACKAGE = 'xrftools', x, f, iterations, epsilon)
 }
 

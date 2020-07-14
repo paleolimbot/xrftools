@@ -1,4 +1,4 @@
 library(testthat)
-library(xrf)
+library(xrftools)
 
-test_check("xrf")
+test_check("xrftools")

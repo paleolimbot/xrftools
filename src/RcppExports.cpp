@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // discreteFilter
 NumericVector discreteFilter(NumericVector x, NumericVector f, bool scale, bool tails);
-RcppExport SEXP _xrf_discreteFilter(SEXP xSEXP, SEXP fSEXP, SEXP scaleSEXP, SEXP tailsSEXP) {
+RcppExport SEXP _xrftools_discreteFilter(SEXP xSEXP, SEXP fSEXP, SEXP scaleSEXP, SEXP tailsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,7 +21,7 @@ END_RCPP
 }
 // discreteFilterIterative
 NumericVector discreteFilterIterative(NumericVector x, NumericVector f, int iterations, double epsilon);
-RcppExport SEXP _xrf_discreteFilterIterative(SEXP xSEXP, SEXP fSEXP, SEXP iterationsSEXP, SEXP epsilonSEXP) {
+RcppExport SEXP _xrftools_discreteFilterIterative(SEXP xSEXP, SEXP fSEXP, SEXP iterationsSEXP, SEXP epsilonSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -35,12 +35,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_xrf_discreteFilter", (DL_FUNC) &_xrf_discreteFilter, 4},
-    {"_xrf_discreteFilterIterative", (DL_FUNC) &_xrf_discreteFilterIterative, 4},
+    {"_xrftools_discreteFilter", (DL_FUNC) &_xrftools_discreteFilter, 4},
+    {"_xrftools_discreteFilterIterative", (DL_FUNC) &_xrftools_discreteFilterIterative, 4},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_xrf(DllInfo *dll) {
+RcppExport void R_init_xrftools(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
