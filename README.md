@@ -1,23 +1,22 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# xrf
+# xrftools
 
-[![Travis-CI Build
-Status](https://travis-ci.org/paleolimbot/xrf.svg?branch=master)](https://travis-ci.org/paleolimbot/xrf)
+![R-CMD-check](https://github.com/paleolimbot/xrftools/workflows/R-CMD-check/badge.svg)
 [![Coverage
-status](https://codecov.io/gh/paleolimbot/xrf/branch/master/graph/badge.svg)](https://codecov.io/github/paleolimbot/xrf?branch=master)
+status](https://codecov.io/gh/paleolimbot/xrftools/branch/master/graph/badge.svg)](https://codecov.io/github/paleolimbot/xrftools?branch=master)
 
-The goal of xrf is to provide tools to read, plot, and interpret X-Ray
-fluorescence spectra.
+The goal of xrftools is to provide tools to read, plot, and interpret
+X-Ray fluorescence spectra.
 
 ## Installation
 
-You can install xrf from github with:
+You can install xrftools from github with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("paleolimbot/xrf")
+# install.packages("remotes")
+remotes::install_github("paleolimbot/xrftools")
 ```
 
 ## Example
@@ -26,14 +25,14 @@ Read in a Panalytical XRF spectrum and plot it.
 
 ``` r
 library(tidyverse)
-library(xrf)
+library(xrftools)
 #> 
-#> Attaching package: 'xrf'
+#> Attaching package: 'xrftools'
 #> The following object is masked from 'package:stats':
 #> 
 #>     filter
 
-pan_example_dir <- system.file("spectra_files/Panalytical", package = "xrf")
+pan_example_dir <- system.file("spectra_files/Panalytical", package = "xrftools")
 pan_files <- list.files(pan_example_dir, ".mp2", full.names = TRUE)
 specs <- read_xrf_panalytical(pan_files)
 specs %>%
@@ -102,7 +101,7 @@ deconvoluted <- specs %>%
     energy_max_kev = kV * 0.75, peaks = xrf_energies("major")
   )
 
-certified_vals <- system.file("spectra_files/oreas_concentrations.csv", package = "xrf") %>%
+certified_vals <- system.file("spectra_files/oreas_concentrations.csv", package = "xrftools") %>%
   read_csv(col_types = cols(standard = col_character(), value = col_double(), .default = col_guess())) %>%
   filter(method == "4-Acid Digestion") %>%
   select(SampleIdent = standard, element, certified_value = value)

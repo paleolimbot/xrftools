@@ -83,7 +83,7 @@
 #'
 read_xrf_example <- function(..., .dir = c("Panalytical"), .which = TRUE) {
   .dir <- match.arg(.dir)
-  example_dir <- system.file("spectra_files", package = "xrf")
+  example_dir <- system.file("spectra_files", package = "xrftools")
   if(.dir == "Panalytical") {
     subdir <- file.path(example_dir, .dir)
     spectra <- read_xrf_panalytical(

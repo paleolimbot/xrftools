@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # xrftools
 
-[![Travis-CI Build Status](https://travis-ci.org/paleolimbot/xrf.svg?branch=master)](https://travis-ci.org/paleolimbot/xrf) [![Coverage status](https://codecov.io/gh/paleolimbot/xrf/branch/master/graph/badge.svg)](https://codecov.io/github/paleolimbot/xrf?branch=master)
+![R-CMD-check](https://github.com/paleolimbot/xrftools/workflows/R-CMD-check/badge.svg) [![Coverage status](https://codecov.io/gh/paleolimbot/xrftools/branch/master/graph/badge.svg)](https://codecov.io/github/paleolimbot/xrftools?branch=master)
 
 The goal of xrftools is to provide tools to read, plot, and interpret X-Ray fluorescence spectra.
 
@@ -38,7 +38,7 @@ Read in a Panalytical XRF spectrum and plot it.
 library(tidyverse)
 library(xrftools)
 
-pan_example_dir <- system.file("spectra_files/Panalytical", package = "xrf")
+pan_example_dir <- system.file("spectra_files/Panalytical", package = "xrftools")
 pan_files <- list.files(pan_example_dir, ".mp2", full.names = TRUE)
 specs <- read_xrf_panalytical(pan_files)
 specs %>%
@@ -94,7 +94,7 @@ deconvoluted <- specs %>%
     energy_max_kev = kV * 0.75, peaks = xrf_energies("major")
   )
 
-certified_vals <- system.file("spectra_files/oreas_concentrations.csv", package = "xrf") %>%
+certified_vals <- system.file("spectra_files/oreas_concentrations.csv", package = "xrftools") %>%
   read_csv(col_types = cols(standard = col_character(), value = col_double(), .default = col_guess())) %>%
   filter(method == "4-Acid Digestion") %>%
   select(SampleIdent = standard, element, certified_value = value)

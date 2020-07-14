@@ -7,7 +7,7 @@ test_that("panalytical spectra work with one or multiple files", {
   expect_true(all(c(".path", ".spectra") %in% colnames(pan_xrf_zero)))
   expect_true(tibble::is_tibble(pan_xrf_zero))
 
-  pan_dir <- system.file("spectra_files/Panalytical", package = "xrf")
+  pan_dir <- system.file("spectra_files/Panalytical", package = "xrftools")
   pan_spec <- read_xrf_panalytical(file.path(pan_dir, "Panalytical_2017-08-1632-Omnian.mp2"))
   expect_is(pan_spec, "spectra")
   expect_equal(nrow(pan_spec), 1)
@@ -23,7 +23,7 @@ test_that("panalytical spectra work with one or multiple files", {
 })
 
 test_that("meta parsing works properly", {
-  pan_dir <- system.file("spectra_files/Panalytical", package = "xrf")
+  pan_dir <- system.file("spectra_files/Panalytical", package = "xrftools")
   pan_spec <- read_xrf_meta_panalytical(
     file.path(pan_dir, "Panalytical_2017-08-1632-Omnian.mp2"),
     parse_meta = TRUE

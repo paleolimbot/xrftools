@@ -28,7 +28,7 @@ A spectra object
 Read a Panalytical spectra file into a spectra object
 }
 \examples{
-pan_dir <- system.file("spectra_files/Panalytical", package = "xrf")
+pan_dir <- system.file("spectra_files/Panalytical", package = "xrftools")
 read_xrf_panalytical(file.path(pan_dir, "Panalytical_2017-08-1632-Omnian.mp2"))
 
 }
