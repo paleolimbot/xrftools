@@ -95,7 +95,7 @@ test_that("data frame s3 methods work on spectra objects", {
 
   expect_identical(
     xrf_combine_spectra(spec, spec),
-    xrf_combine_spectra(list(spec, spec))
+    xrf_combine_spectra(!!!list(spec, spec))
   )
   expect_identical(
     xrf_combine_spectra(spec, spec),

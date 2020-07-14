@@ -4,8 +4,12 @@
 \alias{xrf_energies}
 \title{Get XRF energies for selected elements}
 \usage{
-xrf_energies(elements = "everything", beam_energy_kev = 50, ...,
-  min_relative_intensity = 0.01)
+xrf_energies(
+  elements = "everything",
+  beam_energy_kev = 50,
+  ...,
+  min_relative_intensity = 0.01
+)
 }
 \arguments{
 \item{elements}{Elements or element lists (passed to \link{xrf_element_list}).}

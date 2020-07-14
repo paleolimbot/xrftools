@@ -7,8 +7,10 @@
 \usage{
 xrf_set_element_list(name, elements)
 
-xrf_element_list(name = "major", default = stop("Element list '", name,
-  "' not found"))
+xrf_element_list(
+  name = "major",
+  default = stop("Element list '", name, "' not found")
+)
 }
 \arguments{
 \item{name}{The name for the list. Individual element symbols are returned as-is.}

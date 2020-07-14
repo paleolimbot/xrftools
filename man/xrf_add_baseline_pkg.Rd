@@ -4,8 +4,13 @@
 \alias{xrf_add_baseline_pkg}
 \title{Caclulate baselines using the baseline package}
 \usage{
-xrf_add_baseline_pkg(.spectra, .values = .data$.spectra$cps, ...,
-  .clamp = -Inf, .env = parent.frame())
+xrf_add_baseline_pkg(
+  .spectra,
+  .values = .data$.spectra$cps,
+  ...,
+  .clamp = -Inf,
+  .env = parent.frame()
+)
 }
 \arguments{
 \item{.spectra}{A spectra_df}

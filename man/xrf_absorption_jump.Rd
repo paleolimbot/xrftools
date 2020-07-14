@@ -17,8 +17,12 @@ xrf_transition_probability(element, trans, method = "EADL97")
 
 xrf_fluorescence_yield(element, shell, method = "EADL97")
 
-xrf_coster_kronig_probability(element, shell, coster_kronig_trans,
-  method = "EADL97")
+xrf_coster_kronig_probability(
+  element,
+  shell,
+  coster_kronig_trans,
+  method = "EADL97"
+)
 
 xrf_relative_peak_intensity(element, shell, trans, beam_energy_kev = 50)
 }

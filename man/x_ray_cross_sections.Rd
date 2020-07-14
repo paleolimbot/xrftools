@@ -7,7 +7,15 @@
 \alias{x_ray_emission_probabilities}
 \alias{x_ray_coster_kronig_probabilities}
 \title{EADL97 Atomic data}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 13776 rows and 5 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 13776 rows and 5 columns.
+
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 655 rows and 4 columns.
+
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 4120 rows and 4 columns.
+
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1009 rows and 5 columns.
+}
 \source{
 The PyMca5 python package (\url{https://pypi.org/project/PyMca5/#files}),
 which obtained the data from the EADL page (\url{http://www-nds.iaea.org/epdl97/libsall.htm})

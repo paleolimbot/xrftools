@@ -4,8 +4,13 @@
 \alias{xrf_spectra}
 \title{Create an XRF spectra}
 \usage{
-xrf_spectra(.spectra, ..., .position = NA_integer_, .path = NA_character_,
-  .validate = TRUE)
+xrf_spectra(
+  .spectra,
+  ...,
+  .position = NA_integer_,
+  .path = NA_character_,
+  .validate = TRUE
+)
 }
 \arguments{
 \item{.spectra}{A data frame or list of data frames with columns (at least) "energy_kev" and "cps".}

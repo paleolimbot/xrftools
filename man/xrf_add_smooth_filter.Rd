@@ -4,9 +4,14 @@
 \alias{xrf_add_smooth_filter}
 \title{Add smooth using iterative filtering}
 \usage{
-xrf_add_smooth_filter(.spectra, .values = .data$.spectra$cps,
-  filter = xrf_filter_gaussian(), .iter = 5, .epsilon = -1,
-  .env = parent.frame())
+xrf_add_smooth_filter(
+  .spectra,
+  .values = .data$.spectra$cps,
+  filter = xrf_filter_gaussian(),
+  .iter = 5,
+  .epsilon = -1,
+  .env = parent.frame()
+)
 }
 \arguments{
 \item{.spectra}{A spectra_df}

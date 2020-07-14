@@ -4,9 +4,18 @@
 \alias{autoplot.spectra}
 \title{Plot spectra}
 \usage{
-\method{autoplot}{spectra}(object, subset = NULL, x = .data$energy_kev,
-  y = .data$cps, group = seq_len(nrow(object)), ..., facet = NULL,
-  nrow = NULL, ncol = NULL, scales = "free")
+\method{autoplot}{spectra}(
+  object,
+  subset = NULL,
+  x = .data$energy_kev,
+  y = .data$cps,
+  group = seq_len(nrow(object)),
+  ...,
+  facet = NULL,
+  nrow = NULL,
+  ncol = NULL,
+  scales = "free"
+)
 }
 \arguments{
 \item{object}{A \link{xrf_spectra}.}

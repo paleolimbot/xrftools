@@ -5,14 +5,25 @@
 \alias{xrf_deconvolute_gaussian_least_squares}
 \title{Deconvolute a spectrum using gaussian least squares}
 \usage{
-xrf_add_deconvolution_gls(.spectra, .energy_kev = .data$.spectra$energy_kev,
+xrf_add_deconvolution_gls(
+  .spectra,
+  .energy_kev = .data$.spectra$energy_kev,
   .values = .data$.spectra$cps - .data$.spectra$baseline,
-  energy_min_kev = -Inf, energy_max_kev = Inf, peaks = xrf_energies(),
-  default_sigma = 0.07, .env = parent.frame())
+  energy_min_kev = -Inf,
+  energy_max_kev = Inf,
+  peaks = xrf_energies(),
+  default_sigma = 0.07,
+  .env = parent.frame()
+)
 
-xrf_deconvolute_gaussian_least_squares(energy_kev, response,
-  peaks = xrf_energies(), default_sigma = 0.07, energy_min_kev = -Inf,
-  energy_max_kev = Inf)
+xrf_deconvolute_gaussian_least_squares(
+  energy_kev,
+  response,
+  peaks = xrf_energies(),
+  default_sigma = 0.07,
+  energy_min_kev = -Inf,
+  energy_max_kev = Inf
+)
 }
 \arguments{
 \item{.spectra}{A \link{xrf_spectra} tibble.}

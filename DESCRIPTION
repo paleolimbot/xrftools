@@ -27,7 +27,8 @@ Suggests:
     testthat,
     baseline,
     covr
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1
+Remotes: cran/Peaks
 URL: https://github.com/paleolimbot/xrf
 BugReports: https://github.com/paleolimbot/xrf/issues
 LinkingTo: Rcpp

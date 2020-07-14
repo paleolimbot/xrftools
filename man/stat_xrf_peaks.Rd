@@ -5,11 +5,23 @@
 \alias{stat_xrf_peaks}
 \alias{StatXrfPeaks}
 \title{Add XRF Peaks to a ggplot}
-\format{An object of class \code{StatXrfPeaks} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 3.}
+\format{
+An object of class \code{StatXrfPeaks} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 3.
+}
 \usage{
-stat_xrf_peaks(mapping = NULL, data = NULL, position = "identity", ...,
-  element_list = "lake_sediment", energy_subset = NULL, epsilon = 0.01,
-  box.padding = 0.5, size = 2, inherit.aes = TRUE, show.legend = FALSE)
+stat_xrf_peaks(
+  mapping = NULL,
+  data = NULL,
+  position = "identity",
+  ...,
+  element_list = "lake_sediment",
+  energy_subset = NULL,
+  epsilon = 0.01,
+  box.padding = 0.5,
+  size = 2,
+  inherit.aes = TRUE,
+  show.legend = FALSE
+)
 
 StatXrfPeaks
 }

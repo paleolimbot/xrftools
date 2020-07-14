@@ -4,7 +4,9 @@
 \name{x_ray_transitions}
 \alias{x_ray_transitions}
 \title{X-Ray transitions}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 48 rows and 4 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 48 rows and 4 columns.
+}
 \usage{
 x_ray_transitions
 }

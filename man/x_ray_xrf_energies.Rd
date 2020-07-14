@@ -4,7 +4,9 @@
 \name{x_ray_xrf_energies}
 \alias{x_ray_xrf_energies}
 \title{XRF quantification energies}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1723 rows and 7 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1723 rows and 7 columns.
+}
 \source{
 NIST (2018), EADL97. See \link{x_ray_energies} and \link{x_ray_emission_probabilities}.
 }

@@ -4,8 +4,13 @@
 \alias{xrf_add_baseline_snip}
 \title{Calculate baselines using SNIP}
 \usage{
-xrf_add_baseline_snip(.spectra, .values = .data$.spectra$cps, ...,
-  .clamp = -Inf, .env = parent.frame())
+xrf_add_baseline_snip(
+  .spectra,
+  .values = .data$.spectra$cps,
+  ...,
+  .clamp = -Inf,
+  .env = parent.frame()
+)
 }
 \arguments{
 \item{.spectra}{A spectra_df}

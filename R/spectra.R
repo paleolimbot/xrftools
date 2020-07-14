@@ -155,10 +155,14 @@ unnest.spectra <- function(data, ...) {
 #' @export
 #'
 xrf_combine_spectra <- function(..., .id = NULL) {
-  objects <- list(...)
+  objects <- rlang::list2(...)
   classes <- class_recursive(objects)
+  objects <- lapply(objects, structure, class = "data.frame")
   result <- purrr::invoke(dplyr::bind_rows, objects, .id = .id)
-  out <- new_spectra(result, subclass = setdiff(classes, c("spectra", "tbl_df", "data.frame")))
+  out <- new_spectra(
+    tibble::as_tibble(result),
+    subclass = setdiff(classes, c("spectra", "tbl_df", "data.frame"))
+  )
   validate_spectra(out)
   out
 }
